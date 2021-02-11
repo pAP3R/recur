@@ -1,22 +1,26 @@
+![recur Image](https://i.imgur.com/YXTXzWE.mp4)
+
 ## Why pay more to lose money, when you can pay less??
 
 recur is a web-based order scheduler created to provide additional functionality, such as recurring orders, to popular cryptocurrency exchange APIs which currently do not support them. Currently only configured to work with Coinbase Pro, the application allows scheduling of various recurring order configurations, allowing users to pay substantially lower fees than those they'd encounter on www.Coinbase.com, by interacting directly with the CB Pro API.
 
 ### Why do you care?
 
-Lower fees, mainly. Assuming you have four $25 purchases a month that occur at regular intervals through normal Coinbase.com (a weekly buy schedule), you're currently paying **$7.96** a month in fees.
+Lower fees, mainly. Assuming you have four $25 purchases a month that occur at regular intervals through normal Coinbase.com (a weekly buy schedule). That's $1.99 each purchase, so you're currently paying **$7.96 a month in fees**.
 
-Those same purchases *each cost* $0.125 through Coinbase Pro, even at their highest fee tier. That's $0.50 a month. Say you buy three hundred dollars of crypto a month, making a one hundred dollar purchase of the top three cryptos from coinbase.com. That's $8.97 in fees.  Wildly, three $51 purchases would *also cost* $8.97 in fees!  A smart investor knows they should DCA though, so they're surely buying at least bi-weekly to spread out those gains. That's $17.94 in fees per month! That's crazy!
+Each of those purchases costs only $0.125 through Coinbase Pro, even at their highest fee tier. **That's only $0.50 a month to do the same thing.** That immediately saves you money. Say you buy three hundred dollars of crypto a month, making a one hundred dollar purchase of the top three cryptos from coinbase.com. That's $8.97 in fees.  Wildly, three $51 purchases would *also cost* $8.97 in fees!  A smart investor knows they should DCA though, so they're surely buying at least bi-weekly to spread out those gains. That's $17.94 in fees per month!
 
-Those same purchases will cost you $1.50 and $3.00 respectively, on CoinbasePro, saving a ton of money. This app enables you to schedule any number of orders to be executed automatically, at those sweet, Coinbase Pro rates.
+Those same purchases will cost you $1.50 and $3.00 respectively, on CoinbasePro, saving *a ton of money* which you can use to buy more. This app enables you to schedule any number of orders to be executed automatically, at those sweet, Coinbase Pro rates.
 
 If you *weren't* DCA'ing because the fees were too high, now you can.
 
 # Testing
 
-If you want to play around with this before you put all your moneyz in it, use the sandbox API for coinbase, it's enabled by default in the app.py file
+If you want to play around with this before you put all your moneyz in it, use the sandbox API for coinbase, it's enabled by default in the app.py file.
 
 `auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url="https://api-public.sandbox.pro.coinbase.com")`
+
+CBPro's sandbox comes with a account that has around 200K, it's imagination money, but it's fun to play with the orders.
 
 # Usage
 
