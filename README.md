@@ -1,5 +1,3 @@
-![recur Image](https://i.imgur.com/YXTXzWE.mp4)
-
 ## Why pay more to lose money, when you can pay less??
 
 recur is a web-based order scheduler created to provide additional functionality, such as recurring orders, to popular cryptocurrency exchange APIs which currently do not support them. Currently only configured to work with Coinbase Pro, the application allows scheduling of various recurring order configurations, allowing users to pay substantially lower fees than those they'd encounter on www.Coinbase.com, by interacting directly with the CB Pro API.
