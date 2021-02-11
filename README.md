@@ -95,6 +95,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 
 ## Todo:
 
+- [ ] Add config file
 - [ ] Display 'Account Balance' (For fiat check)
 - [ ] 'Auto-buy' based on market cap, fiat and DCA
 - [ ] 'Attempt Undercut' button
