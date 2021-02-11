@@ -1,0 +1,144 @@
+{% block order_recurring %}
+<br>
+<h4>Scheduled Orders:</h4>
+<p>
+<table class="table table-hover table-sm"  cellpadding="5">
+  <thead>
+    <tr>
+      <td><h5>ID</h5></td>
+      <td><h5>Side</h5></td>
+      <td><h5>Asset</h5></td>
+      <td><h5>Quantity</h5></td>
+      <td><h5>Frequency</h5></td>
+      <td><h5>Exchange</h5></td>
+      <td><h5>Last Run</h5></td>
+      <td><h5>Next Run</h5></td>
+      <td><h5>Enabled</h5></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </thead>
+  {% for order in recurring_orders %}
+  <tr>
+      <td>
+        <h5>
+        <a href="{{ url_for('order_edit', order_id=order['id']) }}">
+          <span class="badge badge-primary">{{ order['id'] }} </span>
+        </a>
+        </h5>
+      </td>
+      <td><h5><span class="badge badge-info">{{ order['side'] }}</span></h5></td>
+      <td>{{ order['asset'] }}</td>
+      <td>${{ order['quantity'] }}</td>
+      <td>{{ order['frequency'] }}</td>
+      <td>{{ order['exchange'] }}</td>
+      <td>{{ order['last_run']|timefilter }}</td>
+      <td>{{ order['next_run']|timefilter }}</td>
+
+      {% if 'Active' in order['active'] %}
+      <td><h5><span class="badge badge-success">Active</span></h5></td>
+      <td>
+        <button class="btn btn-sm btn-outline-secondary" data-href="{{ url_for('deactivate', id=order['id']) }}" data-toggle="modal" data-target="#confirmDeactivate">
+          Deactivate
+        </button>
+      </td>
+      {% elif 'Inactive' in order['active'] %}
+      <td><h5><span class="badge badge-warning">Inactive</span></h5></td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary" data-href="{{ url_for('reactivate', id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivate">
+          Reactivate
+        </button>
+      </td>
+      {% elif 'N/A' in order['active'] %}
+      <td>
+        <h5><span class="badge badge-secondary">N/A</span></h5>
+      </td>
+      {% endif %}
+      <td>
+        <button class="btn btn-sm btn-outline-danger" data-href="{{ url_for('delete', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
+          Delete
+        </button>
+      </td>
+  </tr>
+{% endfor %}
+</table>
+
+<div class="modal fade" id="confirmDeactivate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        Deactivate Order?
+      </div>
+      <div class="modal-body">
+        You are about to deactivate this order, are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-danger btn-ok">Deactivate</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="confirmReactivate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        Reactivate Order?
+      </div>
+      <div class="modal-body">
+        You are about to reactivate this order, are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary btn-ok">Reactivate</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<div class="modal fade" id="confirmReactivateRun" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        This order is overdue!
+      </div>
+      <div class="modal-body">
+        To reactivate this order, <strong>it must be run now</strong.> If you'd like to reactivate this recurring order, click "Reactivate & Run", otherwise cancel and you may delete the order.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-danger btn-ok">Reactivate & Run</a>
+      </div>
+    </div>
+  </div>
+</div>-->
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        Delete Order?
+      </div>
+      <div class="modal-body">
+        You are about to DELETE this order, are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-danger btn-ok">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+  $('#confirmDeactivate').on('show.bs.modal', function(e) {
+      $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+
+  $('#confirmReactivate').on('show.bs.modal', function(e) {
+      $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+
+  $('#confirmDelete').on('show.bs.modal', function(e) {
+      $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+</script>
+{% endblock %}

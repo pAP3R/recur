@@ -1,0 +1,38 @@
+DROP TABLE IF EXISTS order_history;
+DROP TABLE IF EXISTS recurring_orders;
+DROP TABLE IF EXISTS portfolio;
+
+CREATE TABLE order_history (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	side TEXT NOT NULL,
+	asset TEXT NOT NULL,
+	quantity REAL NOT NULL,
+	total REAL NOT NULL,
+	frequency TEXT NOT NULL,
+	exchange TEXT NOT NULL,
+	type TEXT NOT NULL,
+	order_details varchar NOT NULL
+);
+
+
+CREATE TABLE recurring_orders (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	created TIMESTAMP NOT NULL,
+	last_run TIMESTAMP,
+	next_run TIMESTAMP,
+	side TEXT NOT NULL,
+	asset TEXT NOT NULL,
+	quantity REAL NOT NULL,
+	frequency TEXT NOT NULL,
+	active TEXT NOT NULL,
+	exchange TEXT NOT NULL,
+	type TEXT NOT NULL,
+	uuid TEXT NOT NULL
+);
+
+CREATE TABLE portfolio (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	asset TEXT NOT NULL,
+	quantity REAL NOT NULL
+);

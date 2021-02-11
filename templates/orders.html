@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+	<h1>{% block title %}View and Place Orders{% endblock %}</h1>
+	<hr>
+	<br>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-recurring-tab" data-toggle="tab" href="#nav-recurring" role="tab" aria-controls="nav-recurring" aria-selected="true">Recurring Orders <span class="badge badge-primary badge-pill">{{ recurring_orders|length }}</span></a>
+    <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history" role="tab" aria-controls="nav-history" aria-selected="false">Order History <span class="badge badge-primary badge-pill">{{ order_history|length}}</span></a>
+
+	</div>
+	<div class="tab-content" id="nav-tabContent">
+	  <div class="tab-pane fade show active" id="nav-recurring" role="tabpanel" aria-labelledby="nav-recurring-tab">
+				{% block order_recurring %}
+				{% include 'order_recurring.html' %}
+				{% endblock %}
+		</div>
+		<div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+				{% block order_history %}
+				{% include 'order_history.html' %}
+				{% endblock %}
+		</div>
+	</div>
+</div>
+<br>
+<hr>
+<br>
+<div class="container">
+	{% block order_content %}
+	{% include 'order_create.html' %}
+	{% endblock %}
+</div>
+{% endblock %}

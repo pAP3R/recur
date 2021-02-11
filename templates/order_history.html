@@ -1,0 +1,38 @@
+{% block order_history %}<br>
+<h4>Order History:</h4>
+<p>
+<table class="table table-hover table-sm"  cellpadding="5">
+  <thead>
+    <tr>
+      <td><h5>ID</h5></td>
+      <td><h5>Side</h5></td>
+      <td><h5>Asset</h5></td>
+      <td><h5>Type</h5></td>
+      <td><h5>Quantity</h5></td>
+      <td><h5>Total</h5></td>
+      <td><h5>Frequency</h5></td>
+      <td><h5>Exchange</h5></td>
+      <td><h5>Created</h5></td>
+    </tr>
+  </thead>
+  {% for order in order_history %}
+  <tr>
+      <td>
+        <h5>
+        <a href="{{ url_for('order_edit', order_id=order['id']) }}">
+          <span class="badge badge-primary">{{ order['id'] }} </span>
+        </a>
+        </h5>
+      </td>
+      <td><h5><span class="badge badge-info">{{ order['side'] }}</span></h5></td>
+      <td>{{ order['asset'] }}</td>
+      <td>{{ order['type'] }}</td>
+      <td>${{ order['quantity'] }}</td>
+      <td>{{ order['total'] }}</td>
+      <td>{{ order['frequency'] }}</td>
+      <td>{{ order['exchange'] }}</td>
+      <td>{{ order['created']|timefilter }}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}

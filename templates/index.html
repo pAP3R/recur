@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for coin in cb_coins.keys() %}
+    <h5>{{ coin }}: {{ cb_coins[coin]['price'] }}</h5>
+    <p>
+    24h Vol: {{ cb_coins[coin]['volume'] }}<hr>
+    {% endfor %}
+
+{% endblock %}
