@@ -17,16 +17,6 @@ from werkzeug.exceptions import abort
 ######################################
 # CBPro API Setup
 # Public / Auth Client
-# Change fiat pairs here
-cb_coins = [
-    'ETH-USD',
-    'BTC-USD',
-    'UNI-USD',
-    'LTC-USD',
-    'XLM-USD',
-    'COMP-USD'
-]
-
 public_client = cbpro.PublicClient()
 key = ''
 b64secret = ''
@@ -37,6 +27,22 @@ cbpro_api_url = "https://api-public.sandbox.pro.coinbase.com"
 # Prod
 #cbpro_api_url = "https://api.pro.coinbase.com"
 auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url=cbpro_api_url)
+
+# Change fiat pairs here
+
+if 'sandbox' in cbpro_api_url:
+    cb_coins = [
+    'BTC-USD'
+    ]
+else:
+    cb_coins = [
+    'ETH-USD',
+    'BTC-USD',
+    'UNI-USD',
+    'LTC-USD',
+    'XLM-USD',
+    'COMP-USD'
+    ]
 
 ######################################
 
