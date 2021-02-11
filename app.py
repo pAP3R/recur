@@ -32,8 +32,12 @@ public_client = cbpro.PublicClient()
 key = ''
 b64secret = ''
 passphrase = ''
-#auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase)
-auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url="https://api-public.sandbox.pro.coinbase.com")
+
+# Sandbox
+cbpro_api_url = "https://api-public.sandbox.pro.coinbase.com"
+# Prod
+#cbpro_api_url = "https://api.pro.coinbase.com"
+auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url=cbpro_api_url)
 
 ######################################
 
