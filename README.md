@@ -14,7 +14,9 @@ If you *weren't* DCA'ing because the fees were too high, now you can.
 
 # Testing
 
-If you want to play around with this before you put all your moneyz in it, use the sandbox API at `auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url="https://api-public.sandbox.pro.coinbase.com")`
+If you want to play around with this before you put all your moneyz in it, use the sandbox API for coinbase, it's enabled by default in the app.py file
+
+`auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url="https://api-public.sandbox.pro.coinbase.com")`
 
 # Usage
 
