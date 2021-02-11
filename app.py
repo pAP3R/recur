@@ -3,7 +3,6 @@ import cbpro
 import sqlite3
 import time
 import uuid
-import json
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.base import BaseJobStore
 
