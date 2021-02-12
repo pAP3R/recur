@@ -300,28 +300,33 @@ def orders():
             flash('Choose an asset!', 'danger')
 
         if 'quantity' in request.form:
-            side = request.form['side']
-            asset = request.form['asset']
+
             quantity = request.form['quantity']
-            exchange = request.form['exchange']
-            type = "Market"
 
-            if 'oneTimeRadio' in request.form:
-                frequency = "Once"
-                onetime_order_execute(asset, quantity, frequency, -1)
+            if float(quantity) > 5.00:
+                side = request.form['side']
+                asset = request.form['asset']
+                exchange = request.form['exchange']
+                type = "Market"
 
-            if 'recurringRadio' in request.form:
-                frequency = request.form['freqRadios']
-                active = "Active"
-                conn = get_db_connection()
-                created = time.time()
-                nr = created + intervals[frequency]
-                u = str(uuid.uuid4())
-                conn.execute('INSERT INTO recurring_orders (created, last_run, next_run, side, asset, quantity, frequency, active, exchange, type, uuid) VALUES (?,?,?,?,?,?,?,?,?,?,?)', (created, None, nr, side, asset, quantity, frequency, active, exchange, type, u))
-                print("[%s] : Order created in database: %s" % (time.time(), u))
-                conn.commit()
-                conn.close()
-                order_scheduler()
+                if 'oneTimeRadio' in request.form:
+                    frequency = "Once"
+                    onetime_order_execute(asset, quantity, frequency, -1)
+
+                if 'recurringRadio' in request.form:
+                    frequency = request.form['freqRadios']
+                    active = "Active"
+                    conn = get_db_connection()
+                    created = time.time()
+                    nr = created + intervals[frequency]
+                    u = str(uuid.uuid4())
+                    conn.execute('INSERT INTO recurring_orders (created, last_run, next_run, side, asset, quantity, frequency, active, exchange, type, uuid) VALUES (?,?,?,?,?,?,?,?,?,?,?)', (created, None, nr, side, asset, quantity, frequency, active, exchange, type, u))
+                    print("[%s] : Order created in database: %s" % (time.time(), u))
+                    conn.commit()
+                    conn.close()
+                    order_scheduler()
+            else:
+                flash('Minimum order is 5.00', 'danger')
         else:
             flash('Provide an amount in USD', 'danger')
 
