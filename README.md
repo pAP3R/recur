@@ -6,7 +6,7 @@ recur is a web-based order scheduler primarily created to save money on fees by 
 
 This app is intended to help people who currently have recurring orders for crypto currencies scheduled through Coinbase save money on fees. Assuming you have four $25 purchases a month that occur at regular intervals through Coinbase's "Recurring Orders" feature, a fee of $1.99 each buy means you're currently paying **$7.96 a month in fees**.
 
-However, each of those same purchases only costs twelve cents through Coinbase Pro, at the highest fee tier. **That's only $0.50 a month to do the same thing.** Coinbase Pro is free
+However, each of those same purchases only costs twelve cents through Coinbase Pro, at the highest fee tier. **That's only $0.50 a month to do the same thing.** Coinbase Pro is also totally free. There's very little reason *not* to be using it, anyway.
 
 Each of those purchases costs only $0.125 through Coinbase Pro, even at their highest fee tier. **That's only $0.50 a month to do the same thing.**  If you buy three hundred dollars of crypto a month, making a one hundred dollar purchase of the top three cryptos from coinbase.com. That's $8.97 in fees. A smart investor knows they should DCA though, so they're surely buying at least bi-weekly to spread out those gains. Equaling $17.94 in fees per month!
 
