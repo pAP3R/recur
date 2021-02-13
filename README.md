@@ -1,14 +1,16 @@
 ## Why pay more to lose money, when you can pay less??
 
-recur is a web-based order scheduler created to provide additional functionality, such as recurring orders, to popular cryptocurrency exchange APIs which currently do not support them. Currently only configured to work with Coinbase Pro, the application allows scheduling of various recurring order configurations, allowing users to pay substantially lower fees than those they'd encounter on www.Coinbase.com, by interacting directly with the CB Pro API.
+recur is a web-based order scheduler primarily created to save money on fees by providing additional functionality, such as recurring orders, to popular cryptocurrency exchange APIs which currently do not support them. Currently only configured to work with Coinbase Pro, the application allows scheduling of various recurring order configurations, allowing users to pay substantially lower fees than those they'd encounter on www.Coinbase.com, by interacting directly with the CB Pro API.
 
-### Why do you care?
+### Who's this for?
 
-Lower fees, mainly. Assuming you have four $25 purchases a month that occur at regular intervals through normal Coinbase.com (a weekly buy schedule). That's $1.99 each purchase, so you're currently paying **$7.96 a month in fees**.
+This app is intended to help people who currently have recurring orders for crypto currencies scheduled through Coinbase save money on fees. Assuming you have four $25 purchases a month that occur at regular intervals through Coinbase's "Recurring Orders" feature, a fee of $1.99 each buy means you're currently paying **$7.96 a month in fees**.
 
-Each of those purchases costs only $0.125 through Coinbase Pro, even at their highest fee tier. **That's only $0.50 a month to do the same thing.** That immediately saves you money. Say you buy three hundred dollars of crypto a month, making a one hundred dollar purchase of the top three cryptos from coinbase.com. That's $8.97 in fees.  Wildly, three $51 purchases would *also cost* $8.97 in fees!  A smart investor knows they should DCA though, so they're surely buying at least bi-weekly to spread out those gains. That's $17.94 in fees per month!
+However, each of those same purchases only costs twelve cents through Coinbase Pro, at the highest fee tier. **That's only $0.50 a month to do the same thing.** Coinbase Pro is free
 
-Those same purchases will cost you $1.50 and $3.00 respectively, on CoinbasePro, saving *a ton of money* which you can use to buy more. This app enables you to schedule any number of orders to be executed automatically, at those sweet, Coinbase Pro rates.
+Each of those purchases costs only $0.125 through Coinbase Pro, even at their highest fee tier. **That's only $0.50 a month to do the same thing.**  If you buy three hundred dollars of crypto a month, making a one hundred dollar purchase of the top three cryptos from coinbase.com. That's $8.97 in fees. A smart investor knows they should DCA though, so they're surely buying at least bi-weekly to spread out those gains. Equaling $17.94 in fees per month!
+
+Those same purchases will cost you only $1.50 and $3.00 respectively, through CoinbasePro, saving *a ton of money* which you can use to buy more crypto with. This app enables you to schedule any number of orders to be executed automatically, at those sweet, Coinbase Pro rates.
 
 If you *weren't* DCA'ing because the fees were too high, now you can.
 
