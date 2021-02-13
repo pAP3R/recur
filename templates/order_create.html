@@ -5,13 +5,13 @@
 <h5>Available Balance: </h5>
   {% for account in balances %}
   {% if "USD" in account['currency'] %}
-    <h4>${{ account['available'] }} {{ account['currency'] }}</h4>
+    <h6>${{ account['available'] }} {{ account['currency'] }}</h4>
   {% endif %}
   {% if "GBP" in account['currency'] %}
-    <h4>£{{ account['available'] }} {{ account['currency'] }}</h4>
+    <h6>£{{ account['available'] }} {{ account['currency'] }}</h4>
   {% endif %}
   {% if "EUR" in account['currency'] %}
-    <h4>€{{ account['available'] }} {{ account['currency'] }}</h4>
+    <h6>€{{ account['available'] }} {{ account['currency'] }}</h4>
   {% endif %}
   {% endfor %}
 <br>
