@@ -358,13 +358,11 @@ def reactivate_run(asset, frequency, id):
 def order_create():
 
     if request.method == 'POST':
-
         if request.form['asset'] not in cb_coins:
             flash('Choose an asset!', 'danger')
 
         if 'quantity' in request.form:
-
-            quantity = request.form['quantity']
+            quantity = request.form['quantity'] + ".00"
 
             if float(quantity) > 5.00:
                 side = request.form['side']
