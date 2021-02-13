@@ -2,6 +2,16 @@
 <h2>{% block title %} Create Order {% endblock %}</h2>
 <div style="width: 50%;">
 <hr>
+<h5>
+  {% for account in balances %}
+    {% if 'USD' in account['currency'] %}
+      Available Balance: ${{ account['available'] }} USD
+    {% endif %}
+    {% if 'EUR' in account['currency'] %}
+      Available Balance: €{{ account['available'] }} EUR
+    {% endif %}
+  {%% endfor %}
+</h5>
 <br>
     <form method="POST" >
       <div class="form-group row">
@@ -78,21 +88,30 @@
         </div>
       </div>
 
-      <div class="form-group row">
+      <div class="row">
         <label class="col-sm-2 col-form-label" for="orderNotes">Notes</label>
         <div class="col-sm-10">
         <textarea class="form-control" id="orderNotes" rows="3" name="notes"></textarea>
         </div>
       </div>
-
-      <p>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#previewOrderCollapse" aria-expanded="false" aria-controls="previewOrderCollapse" id="previewButton" disabled >Preview Order</button>
-      </p>
-
-
-
-
       <div class="row">
+        <div class="col">
+          <p>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#previewOrderCollapse" aria-expanded="false" aria-controls="previewOrderCollapse" id="previewButton" disabled >Preview Order</button>
+          </p>
+        </div>
+        <div class="col">
+          <input type="hidden" value="Active" name="active">
+          <input type="hidden" value="Buy" name="side">
+          <button type="submit" class="btn btn-success" width="40%" disabled id="submitButton" >Looks good!</button>
+        </div>
+      </div>
+
+
+
+
+
+      <!--<div class="row">
         <div class="collapse multi-collapse" id="previewOrderCollapse">
           <div class="card card-body">
             <h5>Hey! You're about to submit an order!</h5>
@@ -103,7 +122,7 @@
             <button type="submit" class="btn btn-success" width="40%" >Looks good!</button>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </form>
 </div>
