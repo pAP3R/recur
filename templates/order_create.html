@@ -171,9 +171,9 @@
     var content = "You are about to BUY $" + q + ".00 worth of " + a + ". Proceed?";
 
     $('.modal-body').html(content,function(){
-        $('#confirmOrder').modal({show:true});
-    };
-  }
+        $('#confirmOrder').modal("show");
+    });
+  });
 
   function allFilled() {
       var filled = true;
