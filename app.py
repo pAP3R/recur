@@ -227,6 +227,7 @@ def onetime_order_execute(asset, quantity, frequency, id):
     for account in balances:
         #if asset['currency'] == 'EUR':
         if account["currency"] == "USD":
+
             if float(account["balance"]) >= float(quantity):
                 print("Balance OK")
                 print(quantity)
@@ -357,6 +358,9 @@ def reactivate_run(asset, frequency, id):
 @app.route('/order_create', methods=('POST','GET'))
 def order_create():
 
+    if request.form['GET']:
+        return redirect(url_for('orders'))
+
     if request.method == 'POST':
         if request.form['asset'] not in cb_coins:
             flash('Choose an asset!', 'danger')
@@ -371,8 +375,10 @@ def order_create():
                 type = "Market"
 
                 if 'oneTimeRadio' in request.form:
+                    print("one-time")
                     frequency = "Once"
                     onetime_order_execute(asset, quantity, frequency, -1)
+                    return redirect(url_for('orders'))
 
                 if 'recurringRadio' in request.form:
                     frequency = request.form['freqRadios']
@@ -392,8 +398,7 @@ def order_create():
         else:
             flash('Provide an amount in USD', 'danger')
 
-    if request.form['GET']:
-        return render_template('order_create.html', cb_coins=cb_coins)
+
 
 @app.route('/<int:id>/deactivate', methods=('POST','GET'))
 def deactivate(id):
