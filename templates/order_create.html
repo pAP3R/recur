@@ -159,26 +159,21 @@
 
   $('.previewButton').on('click',function(){
     if($("#oneTimeRadio").is(':checked')){
-      var f = "one-time"
-    } else {
-      if($("#dailyRadio").is(':checked')){
-      var f = "daily"
-    } else {
-      if($("#weeklyRadio").is(':checked')){
-      var f = "weekly"
-    } else {
-      if($("#monthlyRadio").is(':checked')){
-      var f = "monthly"
-    }
-    var q = $("quantity").val()
-    var a = $("#asset").val()
+      var f = "one-time";
+      } else {
+        if($("#dailyRadio").is(':checked')) var f = "daily";
+        if($("#weeklyRadio").is(':checked')) var f = "weekly";
+        if($("#monthlyRadio").is(':checked')) var f = "monthly";
+      }
+    var q = $("quantity").val();
+    var a = $("#asset").val();
 
-    var content = "You are about to BUY $" + q + ".00 worth of " + a + ". Proceed?"
+    var content = "You are about to BUY $" + q + ".00 worth of " + a + ". Proceed?";
 
     $('.modal-body').html(content,function(){
         $('#confirmOrder').modal({show:true});
-    });
-  });
+    };
+  }
 
   function allFilled() {
       var filled = true;
