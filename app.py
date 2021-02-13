@@ -358,7 +358,7 @@ def reactivate_run(asset, frequency, id):
 @app.route('/order_create', methods=('POST','GET'))
 def order_create():
 
-    if request.form['GET']:
+    if request.method =='GET':
         return redirect(url_for('orders'))
 
     if request.method == 'POST':
