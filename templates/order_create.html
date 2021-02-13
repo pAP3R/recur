@@ -126,7 +126,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-              <a class="btn btn-success btn-ok">Looks good!</a>
+              <button type="submit" class="btn btn-success btn-ok">Looks good!</button>
             </div>
           </div>
         </div>
@@ -155,31 +155,32 @@
       if(allFilled()) $('#previewButton').removeAttr('disabled');
   });
 
-  $('.previewButton').on('click',function(){
+  $("#previewButton").on("click",function(){
     if($("#oneTimeRadio").is(':checked')){
       var f = "one-time";
       } else {
-        if($("#dailyRadio").is(':checked')) var f = "daily";
-        if($("#weeklyRadio").is(':checked')) var f = "weekly";
-        if($("#monthlyRadio").is(':checked')) var f = "monthly";
+        if($("#dailyRadio").is(":checked")) var f = "daily";
+        if($("#weeklyRadio").is(":checked")) var f = "weekly";
+        if($("#monthlyRadio").is(":checked")) var f = "monthly";
       }
     var q = $("quantity").val();
     var a = $("#asset").val();
 
     var content = "You are about to BUY $" + q + ".00 worth of " + a + ". Proceed?";
 
-    $('.modal-body').html(content,function(){
-        $('#confirmOrder').modal("show");
+    $(".modal-body").html(content,function(){
+        $("#confirmOrder").modal("show");
     });
   });
 
   function allFilled() {
       var filled = true;
-      $('body input').each(function() {
-  	    if($(this).val() == '') filled = false;
+      $("body input").each(function() {
+  	    if($(this).val() == "") filled = false;
       });
       return filled;
   }
+
 
 </script>
 {% endblock %}
