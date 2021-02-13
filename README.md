@@ -22,7 +22,7 @@ CBPro's sandbox comes with a account that has around 200K, it's imagination mone
 
 # Usage
 
-The app has two main components-- Prices and Orders. There's not a whole lot more to it currently. Plans are to implement Binance and CoinMarketCap's APIs next. Most of the functionality exists in the orders endpoint. 
+The app has two main components-- Prices and Orders. There's not a whole lot more to it currently. Plans are to implement Binance and CoinMarketCap's APIs next. Most of the functionality exists in the orders endpoint.
 
 ### Recurring Orders
 ![Image of Orders](https://i.imgur.com/ADCnFbq.png)
@@ -98,7 +98,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 ## Todo:
 
 - [ ] Add config file
-- [ ] Display 'Account Balance' (For fiat check)
+- [x] Display 'Account Balance' (For fiat check)
 - [ ] 'Auto-buy' based on market cap, fiat and DCA
 - [ ] 'Attempt Undercut' button
 - [ ] Fault tolerance
