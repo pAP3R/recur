@@ -291,7 +291,7 @@ def index():
     prices = get_specific_coinbase_coins(cb_coins)
     return render_template('index.html', cb_coins=prices)
 
-@app.route('/orders', methods=('GET'))
+@app.route('/orders')
 def orders():
 
     # if request.method == 'POST':
