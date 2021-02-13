@@ -2,7 +2,7 @@
 <h2>{% block title %} Create Order {% endblock %}</h2>
 <div style="width: 50%;">
 <hr>
-<h5>Available Balance: </h5>
+<h5>Available Balances: </h5>
   {% for account in balances %}
   {% if "USD" in account['currency'] %}
     <h6>${{ account['available'] }} {{ account['currency'] }}</h4>
@@ -46,7 +46,7 @@
         <label for="quantity" class="col-sm-2 col-form-label">Frequency</label>
         <div class="btn-group btn-group-toggle col-sm-10" data-toggle="buttons">
           <label class="btn btn-secondary">
-            <input class="btn btn-secondary" type="radio" data-toggle="collapse" id="oneTimeRadio" value="once" name="oneTimeRadio" data-target="#frequencyPicker">One-Time
+            <input class="btn btn-secondary" type="radio" data-toggle="collapse" id="oneTimeRadio" value="once" name="oneTimeRadio" data-target="#frequencyPicker" checked>One-Time
           </label>
           <label class="btn btn-secondary">
             <input class="btn btn-secondary" type="radio" data-toggle="collapse" id="recurringRadio" value="recurring" name="recurringRadio" data-target="#frequencyPicker">Recurring
@@ -184,7 +184,7 @@
 
   function allFilled() {
       var filled = true;
-      $("body input").each(function() {
+      $("body input radio").each(function() {
   	    if($(this).val() == "") filled = false;
       });
       return filled;
