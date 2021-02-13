@@ -4,12 +4,7 @@
 <hr>
 <h5>
   {% for account in balances %}
-    {% if 'USD' in account['currency'] %}
-      Available Balance: ${{ account['available'] }} USD
-    {% endif %}
-    {% if 'EUR' in account['currency'] %}
-      Available Balance: €{{ account['available'] }} EUR
-    {% endif %}
+    Available Balance: ${{ account['available'] }} {{ account['currency'] }}
   {% endfor %}
 </h5>
 <br>

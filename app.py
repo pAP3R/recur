@@ -333,7 +333,7 @@ def orders():
 
     all_orders = get_all_orders()
     balances = balanceCheck()
-    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cb_coins, k=balances)
+    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cb_coins, balances=balances)
 
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
