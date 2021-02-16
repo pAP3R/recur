@@ -19,7 +19,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
-          <input type="text" class="form-control col-sm-10" id="quantity" value="{{ request.form['quantity'] }}" aria-label="Amount (to the nearest dollar)" name="quantity">
+          <input type="text" class="form-control col-sm-10" id="quantity" value="{{ order['quantity'] }}" aria-label="Amount (to the nearest dollar)" name="quantity">
           <div class="input-group-append">
             <span class="input-group-text">.00</span>
           </div>
@@ -29,78 +29,90 @@
       <div class="form-group row">
         <label for="quantity" class="col-sm-2 col-form-label">Frequency</label>
         <div class="btn-group btn-group-toggle col-sm-10" data-toggle="buttons">
-          <label class="btn btn-secondary">
-            <input class="btn btn-secondary" type="radio" data-toggle="collapse" id="oneTimeRadio" value="once" name="oneTimeRadio" data-target="#frequencyPicker">One-Time
+          <label class="btn btn-secondary active">
+            <input class="btn btn-secondary focus" type="radio" data-toggle="collapse" id="oneTimeRadio" value="once" name="oneTimeRadio" data-target="#frequencyPicker" disabled="disabled">One-Time
           </label>
           <label class="btn btn-secondary">
-            <input class="btn btn-secondary" type="radio" data-toggle="collapse" id="recurringRadio" value="recurring" name="recurringRadio" data-target="#frequencyPicker">Recurring
+            <input class="btn btn-secondary" type="radio" data-toggle="collapse" id="recurringRadio" value="recurring" name="recurringRadio" data-target="#frequencyPicker" disabled="disabled">Recurring
           </label>
         </div>
       </div>
-      <div class="form-group row collapse frequencyPicker" id="frequencyPicker">
-        <label for="quantity" class="col-sm-2 col-form-label">&nbsp;</label>
-        <div class="col-sm-10">
-        <div class="card card-body">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="gridRadios" id="dailyRadio" value="Daily">
-            <label class="form-check-label" for="dailyRadio">
-              Daily
-            </label>
+
+      <div class="collapse frequencyPicker" id="frequencyPicker">
+        <div class="form-group row">
+          <div class="col col-sm-2">&nbsp;</div>
+          <div class="col col-sm-10">
+            <div class="card card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="freqRadios" id="dailyRadio" value="Daily">
+                <label class="form-check-label" for="dailyRadio">
+                  Daily
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="freqRadios" id="everyOtherRadio" value="Bi-Daily">
+                <label class="form-check-label" for="everyOtherRadio">
+                  Every two days
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="freqRadios" id="weeklyRadio" value="Weekly">
+                <label class="form-check-label" for="weeklyRadio">
+                  Weekly
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="freqRadios" id="weeklyRadio" value="Monthly">
+                <label class="form-check-label" for="monthlyRadio">
+                  Monthly
+                </label>
+              </div>
+            </div>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="gridRadios" id="weeklyRadio" value="Weekly">
-            <label class="form-check-label" for="weeklyRadio">
-              Weekly
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="gridRadios" id="weeklyRadio" value="Monthly">
-            <label class="form-check-label" for="monthlyRadio">
-              Monthly
-            </label>
-          </div>
-        </div>
         </div>
       </div>
+
 
       <div class="form-group row">
         <label for="asset" class="col-sm-2 col-form-label">Exchange</label>
         <div class="col-sm-10">
-          <input type="text" readonly class="form-control" id="exchange" value="{{ order['exchange'] }}"  name="exchange">
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="asset" class="col-sm-2 col-form-label">Created</label>
-        <div class="col-sm-10">
-          <input type="text" readonly class="form-control" id="created" value="{{ order['created'] }}" name="created">
+          <input type="text" readonly class="form-control" id="exchange" value="Coinbase" name="exchange">
         </div>
       </div>
 
       <div class="form-group row">
         <label class="col-sm-2 col-form-label" for="orderNotes">Notes</label>
         <div class="col-sm-10">
-        <textarea class="form-control" id="orderNotes" rows="3"></textarea>
+        <textarea class="form-control" id="orderNotes" rows="3" name="notes"></textarea>
         </div>
       </div>
-
-      <button type="submit" class="btn btn-primary mb-2">Edit Order</button>
+      <br>
+      <div class="form-group row">
+            <button class="btn btn-primary" type="submit" id="previewButton">Update Order</button>
+            <input type="hidden" value="Active" name="active">
+            <input type="hidden" value="Buy" name="side">
+            <input type="hidden" value="Market" name="type">
+      </div>
     </form>
 </div>
 
-<script type="text/javascript">
-$("#recurringRadio").focus(function(){
-	$("#frequencyPicker").collapse('show');
-	$("#oneTimeRadio").prop('checked', false);
-})
 
-$("#oneTimeRadio").focus(function(){
-	$("#frequencyPicker").collapse('hide');
-	$("#recurringRadio").prop('checked', false);
-	$("#dailyRadio").prop('checked', false);
-	$("#weeklyRadio").prop('checked', false);
-	$("#monthlyRadio").prop('checked', false);
-})
+<script type="text/javascript">
+  $("#recurringRadio").focus(function(){
+  	$("#frequencyPicker").collapse('show');
+  	$("#oneTimeRadio").prop('checked', false);
+  })
+
+  $("#oneTimeRadio").focus(function(){
+  	$("#frequencyPicker").collapse('hide');
+  	$("#recurringRadio").prop('checked', false);
+  	$("#dailyRadio").prop('checked', false);
+    $("#everyOtherRadio").prop('checked', false);
+  	$("#weeklyRadio").prop('checked', false);
+  	$("#monthlyRadio").prop('checked', false);
+  })
+
+
 </script>
 
 {% endblock %}

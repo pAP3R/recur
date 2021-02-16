@@ -11,9 +11,9 @@
       <td><h5>Quantity</h5></td>
       <td><h5>Frequency</h5></td>
       <td><h5>Exchange</h5></td>
-      <td><h5>Last Run</h5></td>
       <td><h5>Next Run</h5></td>
       <td><h5>Enabled</h5></td>
+      <td></td>
       <td></td>
       <td></td>
     </tr>
@@ -32,7 +32,6 @@
       <td>${{ order['quantity'] }}</td>
       <td>{{ order['frequency'] }}</td>
       <td>{{ order['exchange'] }}</td>
-      <td>{{ order['last_run']|timefilter }}</td>
       <td>{{ order['next_run']|timefilter }}</td>
 
       {% if 'Active' in order['active'] %}
@@ -57,6 +56,11 @@
       <td>
         <button class="btn btn-sm btn-outline-danger" data-href="{{ url_for('delete', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
           Delete
+        </button>
+      </td>
+      <td>
+        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('order_edit', id=order['id']) }}" data-toggle="modal" data-target="#editButton">
+          Edit
         </button>
       </td>
   </tr>

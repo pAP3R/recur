@@ -84,11 +84,17 @@ Don't put anything nasty in the params, they're sure to break, lol
 
 Reactivating an order is a bit weird if it's overdue, I don't think it will work. I have a solution. I will add it soon-ish.
 
+## Errors Fixed:
+
+- Minimum order check of 10.00 was broken
+- Orders which
+
 
 ## Todo:
 
 - [x] Add config file
 - [x] Display 'Account Balance' (For fiat check)
+- [ ] More timing options
 - [ ] 'Auto-buy' option based on market cap, fiat and DCA
 - [ ] 'Attempt Undercut' button
 - [ ] Fault tolerance

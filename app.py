@@ -173,6 +173,10 @@ def scheduled_order_execute(order):
                 print(res)
                 order_details = cfg.auth_client.get_order(res['id'])
 
+                order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
+                fee = order_data[0]['fee']
+                filled = order_data[0]['size']
+
                 if res['message']:
                     print('Something went wrong!')
                     print(res['message'])
@@ -199,6 +203,11 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 t = time.time()
                 print(res)
                 order_details = cfg.auth_client.get_order(res["id"])
+
+                order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
+                fee = order_data[0]['fee']
+                filled = order_data[0]['size']
+
 
 
                 if "message" in res:
@@ -264,13 +273,35 @@ def orders():
 
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
-def order_edit(order_id):
-    order = get_order(order_id)
+def order_edit(id):
+    order = get_order(id)
+
+
+
     if request.method == 'POST':
-        # # TODO:
-        # Add Edit UPDATE statement
-        all_orders = get_all_orders()
-        return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins)
+        if request.method == 'POST':
+            if request.form['asset'] not in cfg.cb_coins:
+                flash('Choose an asset!', 'danger')
+                return render_template('order_edit.html', order=order)
+
+            if 'quantity' in request.form:
+                quantity = request.form['quantity'] + ".00"
+
+                if float(quantity) >= 10.00:
+
+                    conn = get_db_connection()
+                    conn.execute('UPDATE recurring_orders SET quantity = ? WHERE id = ?', (quantity,id))
+                    conn.commit()
+                    conn.close()
+                    flash('Order "{}" was successfully updated.'.format(id), 'success')
+                    return redirect(url_for('orders'))
+                else:
+                    flash('Minimum order is 10.00', 'danger')
+                    return render_template('order_edit.html', order=order)
+            else:
+                flash('Provide a quantity', 'danger')
+                return render_template('order_edit.html', order=order)
+
     else:
         return render_template('order_edit.html', order=order)
 
@@ -291,18 +322,18 @@ def order_create():
     if request.method == 'POST':
         if request.form['asset'] not in cfg.cb_coins:
             flash('Choose an asset!', 'danger')
+            return redirect(url_for('orders'))
 
         if 'quantity' in request.form:
             quantity = request.form['quantity'] + ".00"
 
-            if float(quantity) < 10.00:
+            if float(quantity) >= 10.00:
                 side = request.form['side']
                 asset = request.form['asset']
                 exchange = request.form['exchange']
                 type = "Market"
 
                 if 'oneTimeRadio' in request.form:
-                    print("one-time")
                     frequency = "Once"
                     onetime_order_execute(asset, quantity, frequency, -1)
                     return redirect(url_for('orders'))
@@ -322,8 +353,10 @@ def order_create():
                     return redirect(url_for('orders'))
             else:
                 flash('Minimum order is 10.00', 'danger')
+                return redirect(url_for('orders'))
         else:
             flash('Provide an amount in USD', 'danger')
+            return redirect(url_for('orders'))
 
 
 
