@@ -282,7 +282,7 @@ def order_edit(id):
         if request.method == 'POST':
             if request.form['asset'] not in cfg.cb_coins:
                 flash('Choose an asset!', 'danger')
-                return render_template('order_edit.html', order=order)
+                return render_template('order_edit.html', order_id=order)
 
             if 'quantity' in request.form:
                 quantity = request.form['quantity'] + ".00"
@@ -297,13 +297,13 @@ def order_edit(id):
                     return redirect(url_for('orders'))
                 else:
                     flash('Minimum order is 10.00', 'danger')
-                    return render_template('order_edit.html', order=order)
+                    return render_template('order_edit.html', order_id=order)
             else:
                 flash('Provide a quantity', 'danger')
-                return render_template('order_edit.html', order=order)
+                return render_template('order_edit.html', order_id=order)
 
     else:
-        return render_template('order_edit.html', order=order)
+        return render_template('order_edit.html', order_id=order)
 
 
 @app.route('/<int:id>/reactivate_run')
