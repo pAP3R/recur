@@ -106,7 +106,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 
 ## Obvious Disclaimer
 
-Look, this script just schedules some orders with apscheduler and fires them via CBPro's Py API. I've done a lot of testing to iron out kinks and I'm preeeetty sure that it's not going to double buy, or sell, and that when it restarts it should kick back off with things getting rescheduled. There are a few more items to take care of, but it's useable. Be gentle with it, don't limit test it. It exists on an isolated VM on my ESXi box, one connection in allowed, from only my workstation. If you want it to do more, I happily accept pull requests! There's a lot to do with other API integration, etc.
+Look, this script just schedules some orders with apscheduler and fires them via CBPro's Py API. I've done a lot of testing to iron out kinks and things are pretty smooth. There plenty more to add on, and it's more than useable right now. Don't limit test it. It exists on an isolated VM on my ESXi box, one connection in allowed, from only my workstation. If you want it to do more, I happily accept pull requests! There's a lot to do with other API integration, etc.
 
 ### Donations?
 
