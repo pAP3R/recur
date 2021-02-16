@@ -84,16 +84,20 @@ Don't put anything nasty in the params, they're sure to break, lol
 
 Reactivating an order is a bit weird if it's overdue, I don't think it will work. I have a solution. I will add it soon-ish.
 
-## Errors Fixed:
+## Issues Fixed / Features Added:
 
 - Minimum order check of 10.00 was broken
-- Orders which
+- Orders which were not immediately filled in the initial server response to the `cfg.auth_client.place_market_order()` call were not properly written to the 'order_history' table.
+- Reworked table inserts to first call `cfg.auth_client.get_fills()` to retrieve the fee and size. Will add calc for fee totals vs. what would normally be paid
+- Fixed edit button
+
 
 
 ## Todo:
 
 - [x] Add config file
 - [x] Display 'Account Balance' (For fiat check)
+- [ ] Scheduled order total (weekly / monthly)
 - [ ] More timing options
 - [ ] 'Auto-buy' option based on market cap, fiat and DCA
 - [ ] 'Attempt Undercut' button
@@ -106,6 +110,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 - [x] Capture Order Details
 - [ ] 'Clear Orders' button
 - [x] 'Delete' button
+- [x] 'Edit' button
 - [ ] 'Reactivate' button checks (for rescheduling discrepancies)
 - [ ] KMS?
 - [ ] Refactor SQL stuff?
