@@ -285,14 +285,14 @@ def time_filter(val):
 @app.route('/')
 def index():
     prices = get_specific_coinbase_coins(cfg.cb_coins)
-    return render_template('index.html', cfg.cb_coins=prices)
+    return render_template('index.html', cb_coins=prices)
 
 @app.route('/orders')
 def orders():
 
     all_orders = get_all_orders()
     balances = balanceCheck()
-    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cfg.cb_coins=cfg.cb_coins, balances=balances)
+    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances)
 
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
@@ -302,7 +302,7 @@ def order_edit(order_id):
         # # TODO:
         # Add Edit UPDATE statement
         all_orders = get_all_orders()
-        return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cfg.cb_coins=cfg.cb_coins)
+        return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins)
     else:
         return render_template('order_edit.html', order=order)
 
@@ -311,7 +311,7 @@ def order_edit(order_id):
 def reactivate_run(asset, frequency, id):
     onetime_order_execute(asset, quantity, frequency, id)
     all_orders = get_all_orders()
-    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cfg.cb_coins=cfg.cb_coins)
+    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins)
 
 
 @app.route('/order_create', methods=('POST','GET'))
