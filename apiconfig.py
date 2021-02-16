@@ -36,12 +36,18 @@ else:
     "XLM-USD",
     "COMP-USD",
     "GRT-USD",
-    "SNX-USD"
+    "SNX-USD",
+    "LRC-USD",
+    "BAL-USD",
+    "BAND-USD",
+    "REN-USD",
+    "ALGO-USD"
     ]
 #####################################
 
 # Timings
 intervals = {}
 intervals['Daily'] = 86400
+intervals["Bi-Daily"] = 172800
 intervals['Weekly'] = 604800
 intervals['Monthly'] = 2592000 # 30 days

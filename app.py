@@ -13,37 +13,6 @@ from werkzeug.exceptions import abort
 
 
 
-
-######################################
-# CBPro API Setup
-# Public / Auth Client
-# cfg.public_client = cbpro.PublicClient()
-# key = ''
-# b64secret = ''
-# passphrase = ''
-#
-# # Sandbox
-# cbpro_api_url = "https://api-public.sandbox.pro.coinbase.com"
-# # Prod
-# #cbpro_api_url = "https://api.pro.coinbase.com"
-# cfg.auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url=cbpro_api_url)
-#
-# # Change fiat pairs here
-#
-# if 'sandbox' in cbpro_api_url:
-#     cfg.cb_coins = [
-#     'BTC-USD'
-#     ]
-# else:
-#     cfg.cb_coins = [
-#     'ETH-USD',
-#     'BTC-USD',
-#     'UNI-USD',
-#     'LTC-USD',
-#     'XLM-USD',
-#     'COMP-USD'
-#     ]
-
 ######################################
 
 # apscheduler
@@ -326,7 +295,7 @@ def order_create():
         if 'quantity' in request.form:
             quantity = request.form['quantity'] + ".00"
 
-            if float(quantity) > 5.00:
+            if float(quantity) < 10.00:
                 side = request.form['side']
                 asset = request.form['asset']
                 exchange = request.form['exchange']
@@ -352,7 +321,7 @@ def order_create():
                     order_scheduler()
                     return redirect(url_for('orders'))
             else:
-                flash('Minimum order is 5.00', 'danger')
+                flash('Minimum order is 10.00', 'danger')
         else:
             flash('Provide an amount in USD', 'danger')
 

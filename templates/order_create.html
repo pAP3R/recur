@@ -89,6 +89,12 @@
                 </label>
               </div>
               <div class="form-check">
+                <input class="form-check-input" type="radio" name="freqRadios" id="everyOtherRadio" value="Daily">
+                <label class="form-check-label" for="everyOtherRadio">
+                  Every two days
+                </label>
+              </div>
+              <div class="form-check">
                 <input class="form-check-input" type="radio" name="freqRadios" id="weeklyRadio" value="Weekly">
                 <label class="form-check-label" for="weeklyRadio">
                   Weekly
@@ -175,6 +181,7 @@
   	$("#frequencyPicker").collapse('hide');
   	$("#recurringRadio").prop('checked', false);
   	$("#dailyRadio").prop('checked', false);
+    $("#everyOtherRadio").prop('checked', false);
   	$("#weeklyRadio").prop('checked', false);
   	$("#monthlyRadio").prop('checked', false);
   })
@@ -192,6 +199,7 @@
       var content = "You are about to perform <strong>ONE-TIME</strong>, $" + q + ".00 purchase of <strong>" + a + "</strong>. Proceed?";
       } else {
         if($("#dailyRadio").is(":checked")) var f = "daily";
+        if($("#everyOtherRadio").is(":checked")) var f = "bidaily";
         if($("#weeklyRadio").is(":checked")) var f = "weekly";
         if($("#monthlyRadio").is(":checked")) var f = "monthly";
         var content = "You are about to perform and schedule a <strong>" + f + "</strong> order for $" + q + ".00 worth of <strong>" + a + "</strong>. Proceed?";
