@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import cbpro
 
 # recur Config
 
@@ -9,8 +10,8 @@
 public_client = cbpro.PublicClient()
 
 cbpro_api = {
-    "key" : ""
-    "b64secret" : ""
+    "key" : "",
+    "b64secret" : "",
     "passphrase" : ""
 }
 
@@ -18,7 +19,7 @@ cbpro_api = {
 cbpro_api_url = "https://api-public.sandbox.pro.coinbase.com"
 # Prod
 #cbpro_api_url = "https://api.pro.coinbase.com"
-auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url=cbpro_api_url)
+auth_client = cbpro.AuthenticatedClient(cbpro_api["key"], cbpro_api["b64secret"], cbpro_api["passphrase"], api_url=cbpro_api_url)
 
 # Change fiat pairs here
 
