@@ -273,37 +273,34 @@ def orders():
 
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
-def order_edit(order_id):
-    order = get_order(order_id)
-
-
+def order_edit(order):
 
     if request.method == 'POST':
-        if request.method == 'POST':
-            if request.form['asset'] not in cfg.cb_coins:
-                flash('Choose an asset!', 'danger')
-                return render_template('order_edit.html', order_id=order)
+        if request.form['asset'] not in cfg.cb_coins:
+            flash('Choose an asset!', 'danger')
+            return render_template('order_edit.html', order=order)
 
-            if 'quantity' in request.form:
-                quantity = request.form['quantity'] + ".00"
+        if 'quantity' in request.form:
+            quantity = request.form['quantity'] + ".00"
 
-                if float(quantity) >= 10.00:
+            if float(quantity) >= 10.00:
 
-                    conn = get_db_connection()
-                    conn.execute('UPDATE recurring_orders SET quantity = ? WHERE id = ?', (quantity,id))
-                    conn.commit()
-                    conn.close()
-                    flash('Order "{}" was successfully updated.'.format(id), 'success')
-                    return redirect(url_for('orders'))
-                else:
-                    flash('Minimum order is 10.00', 'danger')
-                    return render_template('order_edit.html', order_id=order)
+                conn = get_db_connection()
+                conn.execute('UPDATE recurring_orders SET quantity = ? WHERE id = ?', (quantity,order_id))
+                conn.commit()
+                conn.close()
+                flash('Order "{}" was successfully updated.'.format(id), 'success')
+                return redirect(url_for('orders'))
             else:
-                flash('Provide a quantity', 'danger')
-                return render_template('order_edit.html', order_id=order)
+                flash('Minimum order is 10.00', 'danger')
+                return render_template('order_edit.html', order=order)
+        else:
+            flash('Provide a quantity', 'danger')
+            return render_template('order_edit.html', order=order)
 
     else:
-        return render_template('order_edit.html', order_id=order)
+        order = get_order(order_id)
+        return render_template('order_edit.html', order=order)
 
 
 @app.route('/<int:id>/reactivate_run')
