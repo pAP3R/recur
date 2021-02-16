@@ -273,8 +273,8 @@ def orders():
 
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
-def order_edit(id):
-    order = get_order(id)
+def order_edit(order_id):
+    order = get_order(order_id)
 
 
 
