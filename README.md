@@ -60,7 +60,7 @@ I run recur on an Ubuntu 18.04 vm hosted on an ESXi box at home, it has very lit
 
 ### Install
 
-Install is easy. Clone the repo, and edit the app.py file to include your API keys. (Again, I'd recommend using keys with 'Trade' permissions *only*, that's good opsec)
+Install is easy. Clone the repo, and edit the apiconfig.py file to include your API keys and whatever fiat / coin pairs you want to see.
 
 Run a virtualenv, install the requirements and run the app. There's an init_db.py script to create the tables and insert a dummy order for testing.
 
@@ -87,9 +87,9 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 
 ## Todo:
 
-- [ ] Add config file
+- [x] Add config file
 - [x] Display 'Account Balance' (For fiat check)
-- [ ] 'Auto-buy' based on market cap, fiat and DCA
+- [ ] 'Auto-buy' option based on market cap, fiat and DCA
 - [ ] 'Attempt Undercut' button
 - [ ] Fault tolerance
 - [ ] Input sanitizing / validation
