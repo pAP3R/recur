@@ -273,7 +273,9 @@ def orders():
 
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
-def order_edit(order):
+def order_edit(order_id):
+    
+    order = get_order(order_id)
 
     if request.method == 'POST':
         if request.form['asset'] not in cfg.cb_coins:

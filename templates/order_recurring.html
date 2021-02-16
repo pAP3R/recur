@@ -22,7 +22,7 @@
   <tr>
       <td>
         <h5>
-        <a href="{{ url_for('order_edit', order=order }}">
+        <a href="{{ url_for('order_edit', order_id=order['id']) }}">
           <span class="badge badge-primary">{{ order['id'] }} </span>
         </a>
         </h5>
@@ -59,7 +59,7 @@
         </button>
       </td>
       <td>
-        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('order_edit', order=order) }}" data-toggle="modal" data-target="#editButton">
+        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('order_edit', order_id=order['id']) }}" data-toggle="modal" data-target="#editButton">
           Edit
         </button>
       </td>
