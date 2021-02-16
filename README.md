@@ -1,24 +1,18 @@
-## Why pay more to lose money, when you can pay less??
+## recur, a CBPro recurring order scheduler
 
-recur is a web-based order scheduler primarily created to save money on fees by providing additional functionality, such as recurring orders, to popular cryptocurrency exchange APIs which currently do not support them. Currently only configured to work with Coinbase Pro, the application allows scheduling of various recurring order configurations, allowing users to pay substantially lower fees than those they'd encounter on www.Coinbase.com, by interacting directly with the CB Pro API.
+recur is a web-based order scheduler created to enable users to schedule recurring orders through CoinbasePro, a feature currently only available on regular Coinbase. By using CBPro over the native order scheduler in Coinbase.com, it's possible to save a significant sum of money, depending on the DCA strategy being used.
 
-### Who's this for?
+### How much money does it save?
 
-This app is intended to help people who currently have recurring orders for crypto currencies scheduled through Coinbase save money on fees. Assuming you have four $25 purchases a month that occur at regular intervals through Coinbase's "Recurring Orders" feature, a fee of $1.99 each buy means you're currently paying **$7.96 a month in fees**.
+Assuming you have four $25 purchases a month, occurring at regular intervals through Coinbase's "Recurring Orders" feature, you're currently paying **$7.96 a month in fees**.
 
-However, each of those same purchases only costs twelve cents through Coinbase Pro, at the highest fee tier. **That's only $0.50 a month to do the same thing.** If you buy three hundred dollars of crypto a month, making a one hundred dollar purchase of the top three cryptos from coinbase.com. That's $8.97 in fees. A smart investor knows they should DCA though, so they're surely buying at least bi-weekly to spread out those gains. Equaling $17.94 in fees per month!
+However, each of those same purchases only costs twelve cents through Coinbase Pro, at the highest fee tier. **That's only $0.50 a month to do the same thing.**
+
+If you buy three hundred dollars of crypto a month, making a one hundred dollar purchase of the top three cryptos from coinbase.com. That's $8.97 in fees. A smart investor knows they should DCA though, so they're surely buying at least bi-weekly to spread out those gains. Equaling $17.94 in fees per month!
 
 Those same purchases will cost you only $1.50 and $3.00 respectively, through CoinbasePro, saving *a ton of money* which you can use to buy more crypto with. This app enables you to schedule any number of orders to be executed automatically, at those sweet, Coinbase Pro rates.
 
-Coinbase Pro is also totally free. There's very little reason *not* to be using it, anyway. If you *weren't* DCA'ing because the fees were too high, now you can.
-
-# Testing
-
-If you want to play around with this before you put all your moneyz in it, use the sandbox API for coinbase, it's enabled by default in the app.py file.
-
-`auth_client = cbpro.AuthenticatedClient(key, b64secret, passphrase, api_url="https://api-public.sandbox.pro.coinbase.com")`
-
-CBPro's sandbox comes with a account that has around 200K, it's imagination money, but it's fun to play with the orders.
+Using this is also totally free. There's very little reason *not* to use this if you already have recurring orders. If you *weren't* DCA'ing because the fees were too high, now you can.
 
 # Usage
 
@@ -33,19 +27,19 @@ The app has two main components-- Prices and Orders. There's not a whole lot mor
 ### Creating an Order
 ![Image of Ordering](https://i.imgur.com/iUbpZ9j.png)
 
-## Prices
+#### Prices
 
 The Prices page is merely there as an experiment. You can configure pairs in the `cb_coins` list and it will show up in the Prices page, and order menus. This page will turn into a quick recap of prices. I learned templates doing this, it was fun.
 
-## Orders
+#### Orders
 
 The orders page, naturally, handles the orders. The top half contains a nav menu with two different tables, one to display all currently configured recurring orders, the other to display a table with all order entries. The lower half of the page contains an order form. Currently, it's only possible to place market orders. You can make one time purchases right there, or set up recurring orders on a daily, weekly or monthly schedule. I have a bootstrap calendar in there right now that I'll hook up for more advanced scheduling.
 
-Once orders are created, they are immediately executed and the entry is written to the 'order_history' table. For recurring orders, the 'recurring_orders' table is updated to include the new order, which lists information including the next time the job will be run. This table will be read by the order scheduler to create apscheduler jobs.
+Orders are created within the 'Create Order' form, obviously. Select your target asset, enter an amount you want to spend and select whether you'd like this to be a recurring order or a one time thing. Both options **place** the order, but a recurring order will create a new entry in the recurring orders table, as well as an entry in the order history.
 
-Should you wish to pause a recurring order, the 'Deactivate' button can be used. This will deactivate the order until you reactivate it, or delete it, whatever. Once it's reactivated, the job will need to be recreated if the date is past the "Next Run" date, otherwise it continues as normal. I'll probably do some ajax stuff to check if the orders overdue, and to auto reschedule or something.
+Should you wish to pause a recurring order, the 'Deactivate' button can be used. This will make it so that even if the orders "trigger" (scheduled date) fires, no order will be run. You can also reactivate a scheduled order if you change your mind. However, orders which are overdue will need to be recreated. I have a solution, will get to it soon.
 
-To ensure jobs are run on schedule, each order is assigned a unique UUID. This  is used as the 'ID' parameter for each apscheduler job, which makes it easy to check if an order is scheduled. When an order is deactivated, the corresponding job is removed from the scheduler. When reactivated or created, it's added. Should the app be stopped, apscheduler will not be running and the orders will not be executed. Orders will be rescheduled automatically upon restart, though if the date is past the "Next Run" date of any of the orders, they'll need to be remade again.
+**Remember:** If the app is not running, the orders will not fire.
 
 
 ## Setup
@@ -54,15 +48,13 @@ To ensure jobs are run on schedule, each order is assigned a unique UUID. This  
 
 You'll probably want a virtualenv set up, so [do that](https://pythonbasics.org/virtualenv/)
 
-recur uses the CoinbasePro API, so obviously that's a requirement. It's recommended to use keys which *only* have 'Trade' permissions, just in case! These API keys can be set up from https://pro.coinbase.com/profile/api
+Next, you'll need to set up the CBPro API if you haven't (https://pro.coinbase.com/profile/api). It's recommended to use keys which *only* have 'Trade' permissions.
 
 Yeah, I know putting API keys in a file sucks, but since we need to do this all without user interaction, we can't have prompt for a pass to decrypt them or anything. I need some vault thing like ansible I think, or some other kms that let's a user put a pass in once or something. I don't know, suggestions welcome.
 
 ### Hosting
 
-You can host it locally or remotely. Because API keys are hardcoded in the script, it's only recommended to use this on a LAN. A kms is probably on the list. It's still possible to secure-ishly host it on AWS, Vultr, or any other VPS as well if you want. Here's an idea-- host it on Vultr for $5.00 a month, restrict access to your home IP, use keys with limited permissions, then donate all the cash you save.
-
-In all seriousness, there are some considerations for how to host it. The scheduler is only running when the flask app is running. The orders are written to a database, but if flask isn't running then the scheduler isn't either, so if the times / triggers are hit the orders won't execute. This means you want it hosted somewhere with high availability, at least during the timeframes your purchases are scheduled. If you host it on your daily machine, know that turning off or rebooting the device means the app will need to be restarted.
+You can host it locally or remotely. It will just run a tiny little web server, so you don't need much, just a machine that stays on. Best to host it on your own machine or a LAN machine though, becasue of the keys. It's still possible to secure-ishly host it on AWS, Vultr, or any other VPS as well if you want. Here's an idea-- host it on Vultr for $5.00 a month, restrict access to your home IP, use keys with limited permissions, then donate all the cash you save.
 
 I run recur on an Ubuntu 18.04 vm hosted on an ESXi box at home, it has very little memory and storage dedicated. As long as it stays up, the orders fire.
 
@@ -82,11 +74,9 @@ python3 init_db.py
 python3 app.py runserver
 ```
 
-That *should* work. I think. If it doesn't I'm sure you can figure it out.
-
 Then, just visit http://loalhost:5000/
 
-Let me know of any issues you find, I'm sure there are lots!
+Let me know of any issues you find.
 
 ## v.0.1 Current Issues:
 
