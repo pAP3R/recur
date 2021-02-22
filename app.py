@@ -162,6 +162,7 @@ def delete_order(id):
 #### These are the same
 def scheduled_order_execute(order):
     print(str(order['id']) + " " + order['side'] + " " + str(order['quantity']))
+    quantity = order['quantity']
     balances = balanceCheck()
     for asset in balances:
         #if asset['currency'] == 'EUR':
