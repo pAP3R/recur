@@ -90,6 +90,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 - Orders which were not immediately filled in the initial server response to the `cfg.auth_client.place_market_order()` call were not properly written to the 'order_history' table.
 - Reworked table inserts to first call `cfg.auth_client.get_fills()` to retrieve the fee and size. Will add calc for fee totals vs. what would normally be paid
 - Fixed edit button
+- Fixed an issue with orders firing-- two variables were improperly named causing scheduled orders to break
 
 
 
@@ -104,7 +105,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 - [ ] Fault tolerance
 - [ ] Input sanitizing / validation
 - [ ] Configurable 'watchlist'
-- [ ] Additional API integrations (Bibance, Gemini, CoinMarketCap)
+- [ ] Additional API integrations (Binance, Gemini, CoinMarketCap)
 - [ ] Twillio / SNS integration for purchase alerts?
 - [ ] Export 'Order History'
 - [x] Capture Order Details
