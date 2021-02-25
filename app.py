@@ -169,7 +169,7 @@ def scheduled_order_execute(order):
         if asset['currency'] == 'USD':
             if float(asset['balance']) >= float(quantity):
                 print("Balance OK")
-                res = cfg.auth_client.place_market_order(product_id, side, funds=quantity)
+                res = cfg.auth_client.place_market_order(asset, side, funds=quantity)
                 t = time.time()
                 print(res)
                 order_details = cfg.auth_client.get_order(res['id'])
