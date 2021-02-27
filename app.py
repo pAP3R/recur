@@ -161,13 +161,15 @@ def delete_order(id):
 
 #### These are the same
 def scheduled_order_execute(order):
-    print(str(order['id']) + " " + order['side'] + " " + str(order['quantity']))
+    print(str(order['id']) + " " + order['side'] + " "  + order['asset'] + " " + str(order['quantity']))
     quantity = order['quantity']
+    side = order['side']
+    asset = order['asset']
     balances = balanceCheck()
-    for asset in balances:
-        #if asset['currency'] == 'EUR':
-        if asset['currency'] == 'USD':
-            if float(asset['balance']) >= float(quantity):
+    for cash in balances:
+        #if cash['currency'] == 'EUR':
+        if cash['currency'] == 'USD':
+            if float(cash['balance']) >= float(quantity):
                 print("Balance OK")
                 res = cfg.auth_client.place_market_order(asset, side, funds=quantity)
                 t = time.time()
@@ -185,18 +187,19 @@ def scheduled_order_execute(order):
                     print("Order executed")
                     conn = get_db_connection()
                     conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, order['id']))
-                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), order['side'], order['asset'], order['quantity'], order_details['filled_size'], order['frequency'], order['exchange'], order['type'], str(order_details)))
+                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), side, asset, quantity, order_details['filled_size'], order['frequency'], order['exchange'], order['type'], str(order_details)))
                     conn.commit()
                     conn.close()
 
 
 def onetime_order_execute(asset, quantity, frequency, id):
-    balances = balanceCheck()
-    for account in balances:
-        #if asset['currency'] == 'EUR':
-        if account["currency"] == "USD":
 
-            if float(account["balance"]) >= float(quantity):
+    balances = balanceCheck()
+    for cash in balances:
+        #if asset['currency'] == 'EUR':
+        if cash["currency"] == "USD":
+
+            if float(cash["balance"]) >= float(quantity):
                 print("Balance OK")
                 print(quantity)
                 print(asset)
