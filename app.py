@@ -163,7 +163,6 @@ def delete_order(id):
 def scheduled_order_execute(order):
     print(str(order['id']) + " " + order['side'] + " "  + order['asset'] + " " + str(order['quantity']))
     quantity = order['quantity']
-    side = order['side']
     asset = order['asset']
     balances = balanceCheck()
     for cash in balances:
@@ -171,7 +170,7 @@ def scheduled_order_execute(order):
         if cash['currency'] == 'USD':
             if float(cash['balance']) >= float(quantity):
                 print("Balance OK")
-                res = cfg.auth_client.place_market_order(asset, side, funds=quantity)
+                res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
                 print(res)
                 order_details = cfg.auth_client.get_order(res['id'])
