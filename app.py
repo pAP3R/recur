@@ -226,7 +226,14 @@ def onetime_order_execute(asset, quantity, frequency, id):
                     conn.close()
                     return order_details,t
 
-
+def sql_updateActive(id):
+    conn = get_db_connection()
+    conn.execute('UPDATE recurring_orders SET active = ? WHERE id = ?', ('Active',id))
+    conn.commit()
+    conn.close()
+    flash('Order "{}" was successfully reactivated.'.format(id), 'success')
+    order_scheduler()
+    return True
 
 ######################################
 # Server stuff
@@ -272,7 +279,7 @@ def orders():
 
     all_orders = get_all_orders()
     balances = balanceCheck()
-    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances)
+    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time())
 
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
@@ -306,14 +313,6 @@ def order_edit(order_id):
     else:
         order = get_order(order_id)
         return render_template('order_edit.html', order_id=order_id)
-
-
-@app.route('/<int:id>/reactivate_run')
-def reactivate_run(asset, frequency, id):
-    onetime_order_execute(asset, quantity, frequency, id)
-    all_orders = get_all_orders()
-    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins)
-
 
 @app.route('/order_create', methods=('POST','GET'))
 def order_create():
@@ -360,8 +359,6 @@ def order_create():
             flash('Provide an amount in USD', 'danger')
             return redirect(url_for('orders'))
 
-
-
 @app.route('/<int:id>/deactivate', methods=('POST','GET'))
 def deactivate(id):
     conn = get_db_connection()
@@ -374,16 +371,17 @@ def deactivate(id):
 
 @app.route('/<int:id>/reactivate', methods=('POST','GET'))
 def reactivate(id):
-
     order = get_order(id)
-    #overdue = is_order_overdue(order['next_run'])
-    conn = get_db_connection()
-    conn.execute('UPDATE recurring_orders SET active = ? WHERE id = ?', ('Active',id))
-    conn.commit()
-    conn.close()
+    sql_updateActive(id)
     flash('Order "{}" was successfully reactivated.'.format(id), 'success')
-    order_scheduler()
     return redirect(url_for('orders'))
+
+@app.route('/<int:id>/reactivate_run')
+def reactivate_run(asset, frequency, id):
+    onetime_order_execute(asset, quantity, frequency, id)
+    sql_updateActive(id)
+    all_orders = get_all_orders()
+    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins)
 
 @app.route('/<int:id>/delete', methods=('POST','GET'))
 def delete(id):
