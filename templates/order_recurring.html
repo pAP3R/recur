@@ -2,7 +2,7 @@
 <br>
 <h4>Scheduled Orders:</h4>
 <p>
-  
+
 </p>
 <table class="table table-hover table-sm"  cellpadding="5">
   <thead>
@@ -46,9 +46,15 @@
       {% elif 'Inactive' in order['active'] %}
       <td><h5><span class="badge badge-warning">Inactive</span></h5></td>
       <td>
+        {% if ctime < order['next_run'] %}
         <button class="btn btn-sm btn-outline-primary" data-href="{{ url_for('reactivate', id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivate">
           Reactivate
         </button>
+        {% elif ctime >= order['next_run'] %}
+        <button class="btn btn-sm btn-outline-primary" data-href="{{ url_for('reactivate_run', asset=order['asset'], frequency=order['frequency'], id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivateRun">
+          Reactivate
+        </button>
+        {% endif %}
       </td>
       {% elif 'N/A' in order['active'] %}
       <td>
@@ -63,11 +69,13 @@
       <td>
         <a class="btn btn-sm btn-outline-primary" href="{{ url_for('order_edit', order_id=order['id']) }}">
           Edit
-        </button>
+        </a>
       </td>
   </tr>
 {% endfor %}
 </table>
+<br>
+<bold>Scheduled Order Totals:</bold> Weekly: $soon | Monthly: $soon
 
 <div class="modal fade" id="confirmDeactivate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -101,14 +109,16 @@
     </div>
   </div>
 </div>
-<!--<div class="modal fade" id="confirmReactivateRun" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmReactivateRun" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         This order is overdue!
       </div>
       <div class="modal-body">
-        To reactivate this order, <strong>it must be run now</strong.> If you'd like to reactivate this recurring order, click "Reactivate & Run", otherwise cancel and you may delete the order.
+        To reactivate this order, <strong>it must be run now</strong>
+        <br>
+        If you'd like to reactivate this recurring order, click "Reactivate & Run", otherwise cancel and you may delete the order.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -116,7 +126,7 @@
       </div>
     </div>
   </div>
-</div>-->
+</div>
 <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -140,6 +150,10 @@
   });
 
   $('#confirmReactivate').on('show.bs.modal', function(e) {
+      $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+
+  $('#confirmReactivateRun').on('show.bs.modal', function(e) {
       $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
   });
 

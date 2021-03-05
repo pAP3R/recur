@@ -91,6 +91,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 - Reworked table inserts to first call `cfg.auth_client.get_fills()` to retrieve the fee and size. Will add calc for fee totals vs. what would normally be paid
 - Fixed edit button
 - Fixed an issue with orders firing-- two variables were improperly named causing scheduled orders to break
+- Reactivating orders that are past due *should* work now
 
 
 
@@ -112,7 +113,7 @@ Reactivating an order is a bit weird if it's overdue, I don't think it will work
 - [ ] 'Clear Orders' button
 - [x] 'Delete' button
 - [x] 'Edit' button
-- [ ] 'Reactivate' button checks (for rescheduling discrepancies)
+- [x] 'Reactivate' button checks (for rescheduling discrepancies)
 - [ ] KMS?
 - [ ] Refactor SQL stuff?
 
