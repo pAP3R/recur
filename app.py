@@ -290,7 +290,7 @@ def order_edit(order_id):
     if request.method == 'POST':
         if request.form['asset'] not in cfg.cb_coins:
             flash('Choose an asset!', 'danger')
-            return render_template('order_edit.html', order_id=order_id)
+            return render_template('order_edit.html', order=order)
 
         if 'quantity' in request.form:
             quantity = request.form['quantity'] + ".00"
@@ -305,14 +305,13 @@ def order_edit(order_id):
                 return redirect(url_for('orders'))
             else:
                 flash('Minimum order is 10.00', 'danger')
-                return render_template('order_edit.html', order_id=order_id)
         else:
             flash('Provide a quantity', 'danger')
-            return render_template('order_edit.html', order_id=order_id)
+
+        return render_template('order_edit.html', order=order)
 
     else:
-        order = get_order(order_id)
-        return render_template('order_edit.html', order_id=order_id)
+        return render_template('order_edit.html', order=order)
 
 @app.route('/order_create', methods=('POST','GET'))
 def order_create():
