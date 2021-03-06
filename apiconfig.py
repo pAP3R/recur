@@ -41,7 +41,8 @@ else:
     "BAL-USD",
     "BAND-USD",
     "REN-USD",
-    "ALGO-USD"
+    "ALGO-USD",
+    "LINK-USD"
     ]
 #####################################
 
