@@ -50,4 +50,5 @@ intervals = {}
 intervals['Daily'] = 86400
 intervals["Bi-Daily"] = 172800
 intervals['Weekly'] = 604800
+intervals['Bi-Weekly'] = 1209600
 intervals['Monthly'] = 2592000 # 30 days

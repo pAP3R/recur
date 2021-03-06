@@ -112,13 +112,20 @@
 <div class="modal fade" id="confirmReactivateRun" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        This order is overdue!
-      </div>
+      <h4>
+        <div class="modal-header">
+          This order is overdue!
+        </div>
+      </h4>
       <div class="modal-body">
-        To reactivate this order, <strong>it must be run now</strong>
-        <br>
-        If you'd like to reactivate this recurring order, click "Reactivate & Run", otherwise cancel and you may delete the order.
+        <p>
+          It is now past the date of this order's trigger date. In order for it to be reactivated, <strong>it must be run now.</strong>
+          <br><br>
+          If you want to reactivate and run this order, click <b>"Reactivate & Run"</b> (duh).
+          <br><br>
+          Otherwise click <b>Cancel</b> and you may delete it.
+        </p>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
