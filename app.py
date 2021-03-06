@@ -49,7 +49,7 @@ def get_db_connection():
 
 # Get order details by ID
 #
-def get_order(order_id):
+def sql_getOrderById(order_id):
     conn = get_db_connection()
     order = conn.execute('SELECT * FROM recurring_orders WHERE id = ?', (order_id,)).fetchone()
     conn.close()
@@ -57,7 +57,7 @@ def get_order(order_id):
         abort(404)
     return order
 
-def get_all_orders():
+def sql_getAllOrders():
     conn = get_db_connection()
     recurring_orders = conn.execute('SELECT * FROM recurring_orders').fetchall()
     order_history = conn.execute('SELECT * FROM order_history').fetchall()
@@ -68,7 +68,7 @@ def get_all_orders():
 def order_scheduler():
 
     # Read the orders from the database
-    all_orders = get_all_orders()
+    all_orders = sql_getAllOrders()
     recurring_orders = all_orders[0]
 
     #  In case the server was restarted or something
@@ -145,7 +145,7 @@ def balanceCheck():
 
 def delete_order(id):
     try:
-        order = get_order(id)
+        order = sql_getOrderById(id)
         conn = get_db_connection()
         conn.execute('DELETE FROM recurring_orders WHERE id = ?', (id,))
         conn.commit()
@@ -173,13 +173,13 @@ def scheduled_order_execute(order):
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
                 print(res)
-                order_details = cfg.auth_client.get_order(res['id'])
+                order_details = cfg.auth_client.sql_getOrderById(res['id'])
 
                 order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
                 fee = order_data[0]['fee']
                 filled = order_data[0]['size']
 
-                if res['message']:
+                if 'message' in res:
                     print('Something went wrong!')
                     print(res['message'])
                 elif 'created_at' in res:
@@ -205,7 +205,7 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
                 print(res)
-                order_details = cfg.auth_client.get_order(res["id"])
+                order_details = cfg.auth_client.sql_getOrderById(res["id"])
 
                 order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
                 fee = order_data[0]['fee']
@@ -277,7 +277,7 @@ def index():
 @app.route('/orders')
 def orders():
 
-    all_orders = get_all_orders()
+    all_orders = sql_getAllOrders()
     balances = balanceCheck()
     return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time())
 
@@ -285,7 +285,7 @@ def orders():
 @app.route('/<int:order_id>', methods=('POST','GET'))
 def order_edit(order_id):
 
-    order = get_order(order_id)
+    order = sql_getOrderById(order_id)
 
     if request.method == 'POST':
         if request.form['asset'] not in cfg.cb_coins:
@@ -370,7 +370,7 @@ def deactivate(id):
 
 @app.route('/<int:id>/reactivate', methods=('POST','GET'))
 def reactivate(id):
-    order = get_order(id)
+    order = sql_getOrderById(id)
     sql_updateActive(id)
     flash('Order "{}" was successfully reactivated.'.format(id), 'success')
     return redirect(url_for('orders'))
@@ -379,7 +379,7 @@ def reactivate(id):
 def reactivate_run(asset, frequency, id):
     onetime_order_execute(asset, quantity, frequency, id)
     sql_updateActive(id)
-    all_orders = get_all_orders()
+    all_orders = sql_getAllOrders()
     return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins)
 
 @app.route('/<int:id>/delete', methods=('POST','GET'))
