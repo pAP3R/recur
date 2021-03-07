@@ -171,18 +171,18 @@ def scheduled_order_execute(order):
                 print("Balance OK")
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
-                print(res)
-                order_details = sql_getOrderById(res['id'])
+                print("[%s]: Fired Order:\n%s" % t)
+                #order_details = sql_getOrderById(res['id'])
 
-                order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
-                fee = order_data[0]['fee']
-                filled = order_data[0]['size']
+                order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
+                fee = order_details[0]['fee']
+                filled = order_details[0]['size']
 
                 if 'message' in res:
-                    print('Something went wrong!')
+                    print("[%s]: Something went wrong!" % t)
                     print(res['message'])
                 elif 'created_at' in res:
-                    print("Order executed")
+                    print("[%s]: Order executed" % t)
                     conn = get_db_connection()
                     conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, order['id']))
                     conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), side, asset, quantity, order_details['filled_size'], order['frequency'], order['exchange'], order['type'], str(order_details)))
@@ -203,18 +203,18 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 print(asset)
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
-                print(res)
-                order_details = sql_getOrderById(res["id"])
+                print("[%s]: Fired Order:\n%s" % (t, res))
+                #order_details = sql_getOrderById(res["id"])
 
-                order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
-                fee = order_data[0]['fee']
-                filled = order_data[0]['size']
+                order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
+                fee = order_details[0]['fee']
+                filled = order_details[0]['size']
 
                 if "message" in res:
-                    print("Something went wrong!")
+                    print("[%s]: Something went wrong!" % t)
                     print(res['message'])
                 elif "created_at" in res:
-                    print("Order executed")
+                    print("[%s]: Order executed" % t)
                     conn = get_db_connection()
                     if id >= 0:
                         conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, id))
@@ -369,7 +369,7 @@ def reactivate(id):
     flash('Order "{}" was successfully reactivated.'.format(id), 'success')
     return redirect(url_for('orders'))
 
-@app.route('/<int:id>/reactivate_run')
+@app.route('/<int:id>/reactivate_run', methods=('POST','GET'))
 def reactivate_run(id):
     order = sql_getOrderById(id)
     onetime_order_execute(order['asset'], order['quantity'], order['frequency'], id)
