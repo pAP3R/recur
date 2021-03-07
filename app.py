@@ -93,7 +93,6 @@ def order_scheduler():
         try:
             scheduler.start()
             print("[%s] : Scheduler started" % time.time())
-            return True
         except Exception as e:
             print("[%s] : Scheduler was unable to be started" % time.time())
             print("[%s] : Exception: %s" % (time.time(), e))
@@ -211,8 +210,6 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 fee = order_data[0]['fee']
                 filled = order_data[0]['size']
 
-
-
                 if "message" in res:
                     print("Something went wrong!")
                     print(res['message'])
@@ -233,21 +230,11 @@ def sql_updateActive(id):
     conn.close()
     flash('Order "{}" was successfully reactivated.'.format(id), 'success')
     order_scheduler()
-    return True
+
 
 ######################################
 # Server stuff
 
-
-class CustomServer(Server):
-    def __call__(self, app, *args, **kwargs):
-        order_scheduler()
-        return Server.__call__(self, app, *args, **kwargs)
-
-app = Flask(__name__)
-manager = Manager(app)
-manager.add_command('runserver', CustomServer())
-app.config['SECRET_KEY'] = 'changeme'
 
 '''
 @app.context_processor
@@ -276,7 +263,6 @@ def index():
 
 @app.route('/orders')
 def orders():
-
     all_orders = sql_getAllOrders()
     balances = balanceCheck()
     return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time())
@@ -307,9 +293,7 @@ def order_edit(order_id):
                 flash('Minimum order is 10.00', 'danger')
         else:
             flash('Provide a quantity', 'danger')
-
         return render_template('order_edit.html', order=order)
-
     else:
         return render_template('order_edit.html', order=order)
 
@@ -394,6 +378,15 @@ def delete(id):
     return redirect(url_for('orders'))
 
 
+class CustomServer(Server):
+    def __call__(self, app, *args, **kwargs):
+        order_scheduler()
+        return Server.__call__(self, app, *args, **kwargs)
+
+app = Flask(__name__)
+manager = Manager(app)
+manager.add_command('runserver', CustomServer())
+app.config['SECRET_KEY'] = 'changeme'
 
 if __name__ == "__main__":
     manager.run()
