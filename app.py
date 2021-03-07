@@ -173,7 +173,7 @@ def scheduled_order_execute(order):
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
                 print(res)
-                order_details = cfg.auth_client.sql_getOrderById(res['id'])
+                order_details = sql_getOrderById(res['id'])
 
                 order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
                 fee = order_data[0]['fee']
@@ -205,7 +205,7 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
                 print(res)
-                order_details = cfg.auth_client.sql_getOrderById(res["id"])
+                order_details = sql_getOrderById(res["id"])
 
                 order_data = list(cfg.auth_client.get_fills(order_id=res["id"]))
                 fee = order_data[0]['fee']
