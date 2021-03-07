@@ -246,14 +246,7 @@ def utility_processor():
         return False
 '''
 
-@app.template_filter('timefilter')
-def time_filter(val):
-    try:
-        r = time.ctime(val)
-        return r
-    except Exception as e:
-        print(val)
-    return val
+
 
 
 @app.route('/')
@@ -387,6 +380,15 @@ app = Flask(__name__)
 manager = Manager(app)
 manager.add_command('runserver', CustomServer())
 app.config['SECRET_KEY'] = 'changeme'
+
+@app.template_filter('timefilter')
+def time_filter(val):
+    try:
+        r = time.ctime(val)
+        return r
+    except Exception as e:
+        print(val)
+    return val
 
 if __name__ == "__main__":
     manager.run()
