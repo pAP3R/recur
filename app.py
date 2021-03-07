@@ -376,8 +376,9 @@ def reactivate(id):
     return redirect(url_for('orders'))
 
 @app.route('/<int:id>/reactivate_run')
-def reactivate_run(asset, frequency, id):
-    onetime_order_execute(asset, quantity, frequency, id)
+def reactivate_run(id):
+    order = sql_getOrderById(id)
+    onetime_order_execute(order['asset'], order['quantity'], order['frequency'], id)
     sql_updateActive(id)
     all_orders = sql_getAllOrders()
     return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins)

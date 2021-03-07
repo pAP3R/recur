@@ -51,7 +51,7 @@
           Reactivate
         </button>
         {% elif ctime >= order['next_run'] %}
-        <button class="btn btn-sm btn-outline-primary" data-href="{{ url_for('reactivate_run', asset=order['asset'], frequency=order['frequency'], id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivateRun">
+        <button class="btn btn-sm btn-outline-primary" data-href="{{ url_for('reactivate_run', id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivateRun">
           Reactivate
         </button>
         {% endif %}
