@@ -245,7 +245,24 @@ def utility_processor():
             return True
         return False
 '''
+class CustomServer(Server):
+    def __call__(self, app, *args, **kwargs):
+        order_scheduler()
+        return Server.__call__(self, app, *args, **kwargs)
 
+app = Flask(__name__)
+manager = Manager(app)
+manager.add_command('runserver', CustomServer())
+app.config['SECRET_KEY'] = 'changeme'
+
+@app.template_filter('timefilter')
+def time_filter(val):
+    try:
+        r = time.ctime(val)
+        return r
+    except Exception as e:
+        print(val)
+    return val
 
 
 
@@ -371,24 +388,7 @@ def delete(id):
     return redirect(url_for('orders'))
 
 
-class CustomServer(Server):
-    def __call__(self, app, *args, **kwargs):
-        order_scheduler()
-        return Server.__call__(self, app, *args, **kwargs)
 
-app = Flask(__name__)
-manager = Manager(app)
-manager.add_command('runserver', CustomServer())
-app.config['SECRET_KEY'] = 'changeme'
-
-@app.template_filter('timefilter')
-def time_filter(val):
-    try:
-        r = time.ctime(val)
-        return r
-    except Exception as e:
-        print(val)
-    return val
 
 if __name__ == "__main__":
     manager.run()
