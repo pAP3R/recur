@@ -185,7 +185,7 @@ def scheduled_order_execute(order):
                     print("[%s]: Order executed" % t)
                     conn = get_db_connection()
                     conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, order['id']))
-                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), side, asset, quantity, order_details['filled_size'], order['frequency'], order['exchange'], order['type'], str(order_details)))
+                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), side, asset, quantity, order_details['filled_size'], order['frequency'], order['exchange'], order['type'], str(order_details[0])))
                     conn.commit()
                     conn.close()
 
@@ -218,7 +218,7 @@ def onetime_order_execute(asset, quantity, frequency, id):
                     conn = get_db_connection()
                     if id >= 0:
                         conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, id))
-                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, order_details['filled_size'], frequency, "Coinbase", "Market", str(order_details)))
+                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, order_details[0]['filled_size'], frequency, "Coinbase", "Market", str(order_details[0])))
                     conn.commit()
                     conn.close()
                     return order_details,t
