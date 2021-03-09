@@ -179,10 +179,10 @@ def scheduled_order_execute(order):
                 filled = order_details[0]['size']
 
                 if 'message' in res:
-                    print("[%s]: Something went wrong!" % t)
+                    print("[%s]: Something went wrong!" % str(t))
                     print(res['message'])
                 elif 'created_at' in res:
-                    print("[%s]: Order executed" % t)
+                    print("[%s]: Order executed" % str(t))
                     conn = get_db_connection()
                     conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, order['id']))
                     conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), side, asset, quantity, order_details['filled_size'], order['frequency'], order['exchange'], order['type'], str(order_details[0])))
@@ -211,10 +211,10 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 filled = order_details[0]['size']
 
                 if "message" in res:
-                    print("[%s]: Something went wrong!" % t)
+                    print("[%s]: Something went wrong!" % str(t))
                     print(res['message'])
                 elif "created_at" in res:
-                    print("[%s]: Order executed" % t)
+                    print("[%s]: Order executed" % str(t))
                     conn = get_db_connection()
                     if id >= 0:
                         conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, id))

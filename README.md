@@ -71,18 +71,12 @@ git clone
 cd recur
 pip install -r requirements.txt
 python3 init_db.py
-python3 app.py runserver
+python3 app.py runserver --host 0.0.0.0 --threaded --no-reload
 ```
 
 Then, just visit http://loalhost:5000/
 
 Let me know of any issues you find.
-
-## v.0.1 Current Issues:
-
-Don't put anything nasty in the params, they're sure to break, lol
-
-Reactivating an order is a bit weird if it's overdue, I don't think it will work. I have a solution. I will add it soon-ish.
 
 ## Issues Fixed / Features Added:
 
