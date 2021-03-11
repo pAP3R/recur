@@ -86,6 +86,7 @@ Let me know of any issues you find.
 - Fixed edit button
 - Fixed an issue with orders firing-- two variables were improperly named causing scheduled orders to break
 - Reactivating orders that are past due *should* work now
+- RIP, orders fired twice. Fixed via running with the `--no-reload` or `use_reloader=False` flags. Will migrate scheduler startup into `before_first_request()`
 
 
 
