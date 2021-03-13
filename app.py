@@ -64,6 +64,21 @@ def sql_getAllOrders():
     conn.close()
     return recurring_orders,order_history
 
+def sql_updateNextRun(order_id, nr):
+    conn = get_db_connection()
+    conn.execute('UPDATE recurring_orders SET next_run = ? WHERE id = ?', (nr, order_id))
+    conn.commit()
+    conn.close()
+
+def sql_updateActive(order_id):
+    conn = get_db_connection()
+    conn.execute('UPDATE recurring_orders SET active = ? WHERE id = ?', ('Active',order_id))
+    conn.commit()
+    conn.close()
+    flash('Order "{}" was successfully reactivated.'.format(order_id), 'success')
+    order_scheduler()
+
+
 # Order Schedule Handler
 def order_scheduler():
 
@@ -117,6 +132,9 @@ def order_scheduler():
                     try:
                         scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
                         print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
+                        sql_updateNextRun(order['id'], nr_tmp)
+                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run)))
+
                     except Exception as e:
                         raise
                 else:
@@ -126,6 +144,8 @@ def order_scheduler():
                     try:
                         scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
                         print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
+                        sql_updateNextRun(order['id'], nr_tmp)
+                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run)))
                     except Exception as e:
                         raise
 
@@ -218,18 +238,13 @@ def onetime_order_execute(asset, quantity, frequency, id):
                     conn = get_db_connection()
                     if id >= 0:
                         conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, id))
+                        print("[%s]: Updating scheduled order" % str(t))
                     conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, frequency, "Coinbase", "Market", str(order_details[0])))
                     conn.commit()
                     conn.close()
                     return order_details,t
 
-def sql_updateActive(id):
-    conn = get_db_connection()
-    conn.execute('UPDATE recurring_orders SET active = ? WHERE id = ?', ('Active',id))
-    conn.commit()
-    conn.close()
-    flash('Order "{}" was successfully reactivated.'.format(id), 'success')
-    order_scheduler()
+
 
 
 ######################################
