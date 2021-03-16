@@ -180,6 +180,7 @@ def delete_order(id):
 
 #### These are the same
 def scheduled_order_execute(order):
+    castError = False
     print(str(order['id']) + " " + order['side'] + " "  + order['asset'] + " " + str(order['quantity']))
     quantity = order['quantity']
     asset = order['asset']
@@ -201,7 +202,11 @@ def scheduled_order_execute(order):
                     filled = order_details[0]['size']
                 except Exception as e:
                     print("[!]: 'order_details' list cast error, unable to retrieve fee / filled")
-                    
+
+                    # Default maker / taker fee
+                    fee = quantity * .005
+                    filled = quantity - fee
+
                 if 'message' in res:
                     print("[%s]: Something went wrong!" % str(t))
                     print(res['message'])
@@ -238,6 +243,9 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 except Exception as e:
                     print("[!]: 'order_details' list cast error, unable to retrieve fee / filled")
 
+                    # Default maker / taker fee
+                    fee = quantity * .005
+                    filled = quantity - fee
 
                 if "message" in res:
                     print("[%s]: Something went wrong!" % str(t))
