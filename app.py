@@ -133,7 +133,7 @@ def order_scheduler():
                         scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
                         print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
                         sql_updateNextRun(order['id'], nr_tmp)
-                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run)))
+                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run))
 
                     except Exception as e:
                         raise
@@ -145,7 +145,7 @@ def order_scheduler():
                         scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
                         print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
                         sql_updateNextRun(order['id'], nr_tmp)
-                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run)))
+                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run))
                     except Exception as e:
                         raise
 
