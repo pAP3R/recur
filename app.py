@@ -191,13 +191,17 @@ def scheduled_order_execute(order):
                 print("Balance OK")
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
-                print("[%s]: Fired Order:\n%s" % t)
+                print("[%s]: Fired Order:\n%s\n" % (t, res))
                 #order_details = sql_getOrderById(res['id'])
 
                 order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
-                fee = order_details[0]['fee']
-                filled = order_details[0]['size']
-
+                print(order_details)
+                try:
+                    fee = order_details[0]['fee']
+                    filled = order_details[0]['size']
+                except Exception as e:
+                    print("[!]: 'order_details' list cast error, unable to retrieve fee / filled")
+                    
                 if 'message' in res:
                     print("[%s]: Something went wrong!" % str(t))
                     print(res['message'])
@@ -223,12 +227,17 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 print(asset)
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 t = time.time()
-                print("[%s]: Fired Order:\n%s" % (t, res))
+                print("[%s]: Fired Order:\n%s\n" % (t, res))
                 #order_details = sql_getOrderById(res["id"])
 
                 order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
-                fee = order_details[0]['fee']
-                filled = order_details[0]['size']
+                print(order_details)
+                try:
+                    fee = order_details[0]['fee']
+                    filled = order_details[0]['size']
+                except Exception as e:
+                    print("[!]: 'order_details' list cast error, unable to retrieve fee / filled")
+
 
                 if "message" in res:
                     print("[%s]: Something went wrong!" % str(t))
