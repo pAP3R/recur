@@ -214,7 +214,7 @@ def scheduled_order_execute(order):
                     print("[%s]: Order executed" % str(t))
                     conn = get_db_connection()
                     conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, order['id']))
-                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), "Buy"", asset, quantity, filled, order['frequency'], order['exchange'], order['type'], str(order_details[0])))
+                    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, order['frequency'], order['exchange'], order['type'], str(order_details[0])))
                     conn.commit()
                     conn.close()
 
