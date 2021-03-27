@@ -86,34 +86,29 @@ def order_scheduler():
     all_orders = sql_getAllOrders()
     recurring_orders = all_orders[0]
 
-    #  In case the server was restarted or something
+    #  This will only ever run once, at startup
+    # It will populate and start the scheduler
     if not scheduler.running:
         print("[%s] : Starting scheduler..." % time.time())
         # Iterate through table entries to make sure everything is rescheduled after restart
         for order in recurring_orders:
             if order['active'] == 'Active':
-                # Check to see if the order has ever been run
-                if order['last_run'] is None:
-                    f = order['frequency']
-                    c = order['created']
-                    nr_tmp = c + cfg.intervals[f]
-                    next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(nr_tmp))
-                    scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
-                else:
-                    f = order['frequency']
-                    lr = order['last_run']
-                    nr_tmp = lr + cfg.intervals[f]
-                    next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(nr_tmp))
-                    scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
+                next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(order['next_run']))
+                scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
+                print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
         try:
             scheduler.start()
             print("[%s] : Scheduler started" % time.time())
+            return True
         except Exception as e:
             print("[%s] : Scheduler was unable to be started" % time.time())
             print("[%s] : Exception: %s" % (time.time(), e))
             return False
 
 
+    # Call this when we need to schedule or reschedule / update orders
+    # Basically, ever time you need to call the scheduler you'll be hitting here
+    #
     # For each order in the recurring table
     for order in recurring_orders:
         # If the order's UUID doesn't exist in the scheduler, add it
@@ -121,39 +116,20 @@ def order_scheduler():
         if not scheduler.get_job(order['uuid']):
             # Quick check to make sure things don't get out of sync between the scheduler and the database entries
             if order['active'] == 'Active':
-                f = order['frequency']
-                c = order['created']
-                if order['last_run'] is None:
-                    print("Order never run! Running now!")
-                    res = onetime_order_execute(order['asset'], order['quantity'], order['frequency'], order['id'])
-                    lr = res[1]
-                    nr_tmp = lr + cfg.intervals[f]
-                    next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(nr_tmp))
-                    try:
-                        scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
-                        print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
-                        sql_updateNextRun(order['id'], nr_tmp)
-                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run))
+                next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(order['next_run']))
+                scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
+                print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
 
-                    except Exception as e:
-                        raise
-                else:
-                    lr = order['last_run']
-                    nr_tmp = lr + cfg.intervals[f]
-                    next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(nr_tmp))
-                    try:
-                        scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
-                        print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
-                        sql_updateNextRun(order['id'], nr_tmp)
-                        print("[%s] : Updated order's 'next_run': %s" % (time.time(), next_run))
-                    except Exception as e:
-                        raise
+            # It exists in the scheduler
+            else:
+                # Make sure it's not supposed to be set to inactive
+                if 'Inactive' in order['active']:
+                    scheduler.remove_job(order['uuid'])
 
-        # It exists in the scheduler
-        else:
-            # Make sure it's not supposed to be set to inactive
-            if 'Inactive' in order['active']:
-                scheduler.remove_job(order['uuid'])
+        # If the order exists, let's update it in case anything changed with the order it's based on
+        if scheduler.get_job(order['uuid']):
+            next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(order['next_run']))
+            scheduler.reschedule_job(order['uuid'], 'date', args=[order], run_date=next_run)
 
     print("[%s] : Current jobs:" % time.time())
     print(scheduler.get_jobs())
@@ -162,7 +138,7 @@ def balanceCheck():
     accounts = cfg.auth_client.get_accounts()
     return accounts
 
-def delete_order(id):
+def sql_delete_order(id):
     try:
         order = sql_getOrderById(id)
         conn = get_db_connection()
@@ -178,10 +154,10 @@ def delete_order(id):
 
 
 
-#### These are the same
+#### Used for firing scheduled orders
 def scheduled_order_execute(order):
-    castError = False
-    print(str(order['id']) + " " + order['side'] + " "  + order['asset'] + " " + str(order['quantity']))
+
+    print("[+] Order: " + str(order['id']) + " " + order['side'] + " "  + order['asset'] + " " + str(order['quantity']))
     quantity = order['quantity']
     asset = order['asset']
     balances = balanceCheck()
@@ -191,34 +167,43 @@ def scheduled_order_execute(order):
             if float(cash['balance']) >= float(quantity):
                 print("Balance OK")
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
-                t = time.time()
-                print("[%s]: Fired Order:\n%s\n" % (t, res))
-                #order_details = sql_getOrderById(res['id'])
 
+                # Time calculations for order 'last_run' and 'next_run'
+                current_time = time.time()
+                next_run = current_time + cfg.intervals[order['frequency']]
+
+                # Get the order details and print them
                 order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
-                print(order_details)
+                print("[%s]: Fired Order:\n%s\n" % (current_time, order_details))
+
+                # Check for the fee and size
+                # Sometimes this fails because coinbase :shrug
                 try:
                     fee = order_details[0]['fee']
                     filled = order_details[0]['size']
+                # Error, estimating fees
                 except Exception as e:
                     print("[!]: 'order_details' list cast error, unable to retrieve fee / filled")
-
                     # Default maker / taker fee
                     fee = quantity * .005
                     filled = quantity - fee
 
+                # Check for an error
                 if 'message' in res:
-                    print("[%s]: Something went wrong!" % str(t))
+                    print("[%s]: Something went wrong!" % str(current_time))
                     print(res['message'])
+                # If there's no error, the order worked and we can update the database
                 elif 'created_at' in res:
-                    print("[%s]: Order executed" % str(t))
+                    print("[%s]: Order executed" % str(current_time))
                     conn = get_db_connection()
-                    conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, order['id']))
+                    conn.execute('UPDATE recurring_orders SET last_run = ?, next_run = ? WHERE id = ?', (current_time, next_run, order['id']))
                     conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, order['frequency'], order['exchange'], order['type'], str(order_details[0])))
                     conn.commit()
                     conn.close()
 
 
+# Used for firing a one time order
+# Also used when reactivating orders that were overdue
 def onetime_order_execute(asset, quantity, frequency, id):
 
     balances = balanceCheck()
@@ -253,8 +238,10 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 elif "created_at" in res:
                     print("[%s]: Order executed" % str(t))
                     conn = get_db_connection()
+                    # If there's an ID, this is coming from reactivate_run (probably) and needs to have the corresponding recurring order updated
                     if id >= 0:
-                        conn.execute('UPDATE recurring_orders SET last_run = ? WHERE id = ?', (t, id))
+                        next_run = t + cfg.intervals[frequency]
+                        conn.execute('UPDATE recurring_orders SET last_run = ?, next_run = ? WHERE id = ?', (t, next_run, id))
                         print("[%s]: Updating scheduled order" % str(t))
                     conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, frequency, "Coinbase", "Market", str(order_details[0])))
                     conn.commit()
@@ -411,7 +398,7 @@ def reactivate_run(id):
 
 @app.route('/<int:id>/delete', methods=('POST','GET'))
 def delete(id):
-    deleted = delete_order(id)
+    deleted = sql_delete_order(id)
     if deleted:
         flash('Order "{}" was successfully deleted.'.format(id), 'success')
     else:
