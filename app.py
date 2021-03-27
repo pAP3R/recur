@@ -129,7 +129,7 @@ def order_scheduler():
         # If the order exists, let's update it in case anything changed with the order it's based on
         if scheduler.get_job(order['uuid']):
             next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(order['next_run']))
-            scheduler.reschedule_job(order['uuid'], 'date', args=[order], run_date=next_run)
+            scheduler.reschedule_job(order['uuid'], trigger='date', run_date=next_run)
 
     print("[%s] : Current jobs:" % time.time())
     print(scheduler.get_jobs())
