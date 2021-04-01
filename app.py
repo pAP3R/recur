@@ -120,16 +120,17 @@ def order_scheduler():
                 scheduler.add_job(scheduled_order_execute, 'date', args=[order], run_date=next_run, id=order['uuid'])
                 print("[%s] : Order created in scheduler: %s" % (time.time(), order['uuid']))
 
-            # It exists in the scheduler
-            else:
-                # Make sure it's not supposed to be set to inactive
-                if 'Inactive' in order['active']:
-                    scheduler.remove_job(order['uuid'])
-
         # If the order exists, let's update it in case anything changed with the order it's based on
         if scheduler.get_job(order['uuid']):
-            next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(order['next_run']))
-            scheduler.reschedule_job(order['uuid'], trigger='date', run_date=next_run)
+            # Make sure it's not supposed to be set to inactive
+            if 'Inactive' in order['active']:
+                scheduler.remove_job(order['uuid'])
+            else:
+                # Check if the order has never been run (new order!)
+                if order['last_run'] == None:
+                    onetime_order_execute(order['asset'], order['quantity'], order['frequency'], order['id'])
+                next_run = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(order['next_run']))
+                scheduler.reschedule_job(order['uuid'], trigger='date', run_date=next_run)
 
     print("[%s] : Current jobs:" % time.time())
     print(scheduler.get_jobs())
@@ -356,12 +357,12 @@ def order_create():
                     active = "Active"
                     conn = get_db_connection()
                     created = time.time()
-                    nr = created + cfg.intervals[frequency]
                     u = str(uuid.uuid4())
-                    conn.execute('INSERT INTO recurring_orders (created, last_run, next_run, side, asset, quantity, frequency, active, exchange, type, uuid) VALUES (?,?,?,?,?,?,?,?,?,?,?)', (created, None, nr, side, asset, quantity, frequency, active, exchange, type, u))
-                    print("[%s] : Order created in database: %s" % (time.time(), u))
+                    conn.execute('INSERT INTO recurring_orders (created, last_run, next_run, side, asset, quantity, frequency, active, exchange, type, uuid) VALUES (?,?,?,?,?,?,?,?,?,?,?)', (created, None, None, side, asset, quantity, frequency, active, exchange, type, u))
                     conn.commit()
                     conn.close()
+                    print("[%s] : Order created in database: %s" % (time.time(), u))
+
                     order_scheduler()
                     return redirect(url_for('orders'))
             else:
