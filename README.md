@@ -87,6 +87,7 @@ Let me know of any issues you find.
 - Fixed an issue with orders firing-- two variables were improperly named causing scheduled orders to break
 - Reactivating orders that are past due *should* work now
 - RIP, orders fired twice. Fixed via running with the `--no-reload` or `use_reloader=False` flags. Will migrate scheduler startup into `before_first_request()`
+- Added `misfire_grace_time=3600` to the `add_job()` calls due to a few misses (https://stackoverflow.com/questions/41428118/apscheduler-missing-jobs-after-adding-misfire-grace-time)
 
 
 

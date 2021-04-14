@@ -42,7 +42,8 @@ else:
     "BAND-USD",
     "REN-USD",
     "ALGO-USD",
-    "LINK-USD"
+    "LINK-USD",
+    "ADA-USD"
     ]
 #####################################
 
