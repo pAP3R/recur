@@ -88,7 +88,10 @@ Let me know of any issues you find.
 - Reactivating orders that are past due *should* work now
 - RIP, orders fired twice. Fixed via running with the `--no-reload` or `use_reloader=False` flags. Will migrate scheduler startup into `before_first_request()`
 - Added `misfire_grace_time=3600` to the `add_job()` calls due to a few misses (https://stackoverflow.com/questions/41428118/apscheduler-missing-jobs-after-adding-misfire-grace-time)
-
+- Changed `misfire_grace_time=3600` to `None`
+- Refactored / Consolidated a lot of the SQL stuff, probably more to go, but it makes it easier to manage overall
+- Added placeholders for order totals
+- Added a small `time.sleep(1)` to purchases to help obtain order details
 
 
 ## Todo:
@@ -96,7 +99,7 @@ Let me know of any issues you find.
 - [x] Add config file
 - [x] Display 'Account Balance' (For fiat check)
 - [ ] Scheduled order total (weekly / monthly)
-- [ ] More timing options
+- [x] More timing options
 - [ ] 'Auto-buy' option based on market cap, fiat and DCA
 - [ ] 'Attempt Undercut' button
 - [ ] Fault tolerance
@@ -111,7 +114,7 @@ Let me know of any issues you find.
 - [x] 'Edit' button
 - [x] 'Reactivate' button checks (for rescheduling discrepancies)
 - [ ] KMS?
-- [ ] Refactor SQL stuff?
+- [x] Refactor SQL stuff?
 
 ## Obvious Disclaimer
 

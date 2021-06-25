@@ -62,7 +62,7 @@
       </td>
       {% endif %}
       <td>
-        <button class="btn btn-sm btn-outline-danger" data-href="{{ url_for('delete', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
+        <button class="btn btn-sm btn-outline-danger" data-href="{{ url_for('deleteOrder', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
           Delete
         </button>
       </td>
@@ -75,7 +75,7 @@
 {% endfor %}
 </table>
 <br>
-<bold>Scheduled Order Totals:</bold> Weekly: $soon | Monthly: $soon
+<bold>Scheduled Order Totals:</bold> Weekly: ${{ weeklyOrderTotal }} | Monthly: ${{ monthlyOrderTotal }}
 
 <div class="modal fade" id="confirmDeactivate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
