@@ -4,7 +4,7 @@
 <p>
 
 </p>
-<table class="table table-hover table-sm"  cellpadding="5">
+<table class="table table-hover table-sm"  cellpadding="5" id="recurringOrdersTable">
   <thead>
     <tr>
       <td><h5>ID</h5></td>
@@ -166,6 +166,10 @@
 
   $('#confirmDelete').on('show.bs.modal', function(e) {
       $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+
+  $(document).ready(function () {
+      $('#recurringOrdersTable').DataTable();
   });
 </script>
 {% endblock %}
