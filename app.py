@@ -241,7 +241,7 @@ def onetime_order_execute(asset, quantity, frequency, id):
                 print(asset)
                 res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 current_time = time.time()
-                print("[%s]: Fired Order:\n%s\n" % (t, res))
+                print("[%s]: Fired Order:\n%s\n" % (current_time, res))
                 #order_details = sql_Get_Order_By_Id(res["id"])
 
                 order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
@@ -256,12 +256,12 @@ def onetime_order_execute(asset, quantity, frequency, id):
                     filled = quantity - fee
 
                 if "message" in res:
-                    print("[%s]: Something went wrong!" % str(t))
+                    print("[%s]: Something went wrong!" % str(current_time))
                     print(res['message'])
                 elif "created_at" in res:
-                    print("[%s]: Order executed" % str(t))
+                    print("[%s]: Order executed" % str(current_time))
                     sql_Update_Order_OneTime(current_time, id, asset, quantity, filled, frequency, order_details)
-                    return order_details,t
+                    return order_details,current_time
 
 
 #def order_Totals(orders):
