@@ -62,7 +62,7 @@
       </td>
       {% endif %}
       <td>
-        <button class="btn btn-sm btn-danger" data-href="{{ url_for('deleteOrder', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
+        <button class="btn btn-sm btn-outline-danger" data-href="{{ url_for('deleteOrder', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
           Delete
         </button>
       </td>
@@ -146,7 +146,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-outline-danger btn-ok">Delete</a>
+        <a class="btn btn-danger btn-ok">Delete</a>
       </div>
     </div>
   </div>
