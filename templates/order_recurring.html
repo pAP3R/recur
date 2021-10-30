@@ -39,7 +39,7 @@
       {% if 'Active' in order['active'] %}
       <td><h5><span class="badge badge-success">Active</span></h5></td>
       <td>
-        <button class="btn btn-sm btn-outline-secondary" data-href="{{ url_for('deactivate', id=order['id']) }}" data-toggle="modal" data-target="#confirmDeactivate">
+        <button class="btn btn-sm btn-secondary" data-href="{{ url_for('deactivate', id=order['id']) }}" data-toggle="modal" data-target="#confirmDeactivate">
           Deactivate
         </button>
       </td>
@@ -62,7 +62,7 @@
       </td>
       {% endif %}
       <td>
-        <button class="btn btn-sm btn-outline-danger" data-href="{{ url_for('deleteOrder', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
+        <button class="btn btn-sm btn-danger" data-href="{{ url_for('deleteOrder', id=order['id']) }}" data-toggle="modal" data-target="#confirmDelete">
           Delete
         </button>
       </td>
