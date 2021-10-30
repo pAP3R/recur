@@ -175,19 +175,6 @@ def balance_Check():
     accounts = cfg.auth_client.get_accounts()
     return accounts
 
-# Order totaller
-def order_Totals():
-    orderTotals = sql_Get_All_Orders()
-    wT = 0
-    mT = 0
-    for order in orderTotals[0]:
-        if order['active'] == "Active":
-            if order['frequency'] == "Weekly":
-                wT += order['quantity']
-            elif order['frequency'] == "Monthly":
-                mT += order['quantity']
-    mT += (wT * 4)
-    return wT,mT
 
 
 
@@ -323,8 +310,8 @@ def index():
 def orders():
     all_orders = sql_Get_All_Orders()
     balances = balance_Check()
-    order_totals_fiat = order_Totals()
-    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time(), order_Totals=order_totals_fiat)
+    #order_totals_fiat = order_Totals(all_orders[0])
+    return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time())
     #return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time(), order_totals=order_totals_fiat)
 
 
