@@ -12,3 +12,7 @@ h1 {
 .alert.error {
   background-color: red;
 }
+
+hr {
+  color: white;
+}
