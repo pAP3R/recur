@@ -47,11 +47,11 @@
       <td><h5><span class="badge badge-warning">Inactive</span></h5></td>
       <td>
         {% if ctime < order['next_run'] %}
-        <button class="btn btn-sm btn-outline-primary" data-href="{{ url_for('reactivate', id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivate">
+        <button class="btn btn-sm btn-primary" data-href="{{ url_for('reactivate', id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivate">
           Reactivate
         </button>
         {% elif ctime >= order['next_run'] %}
-        <button class="btn btn-sm btn-outline-primary" data-href="{{ url_for('reactivate_run', id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivateRun">
+        <button class="btn btn-sm btn-primary" data-href="{{ url_for('reactivate_run', id=order['id']) }}" data-toggle="modal" data-target="#confirmReactivateRun">
           Reactivate
         </button>
         {% endif %}
@@ -67,7 +67,7 @@
         </button>
       </td>
       <td>
-        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('order_edit', order_id=order['id']) }}">
+        <a class="btn btn-sm btn-primary" href="{{ url_for('order_edit', order_id=order['id']) }}">
           Edit
         </a>
       </td>
