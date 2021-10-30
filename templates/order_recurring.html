@@ -74,8 +74,9 @@
   </tr>
 {% endfor %}
 </table>
-<br>
-<bold>Scheduled Order Totals:</bold> Weekly: ${{ weeklyOrderTotal }} | Monthly: ${{ monthlyOrderTotal }}
+<h5>Totals:</h5>
+<h6>Weekly: ${{ order_Totals[0] }}</h6>
+<h6>Monthly: ${{ order_Totals[1] }}</h6>
 
 <div class="modal fade" id="confirmDeactivate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
