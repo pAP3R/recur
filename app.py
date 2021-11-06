@@ -104,9 +104,14 @@ def sql_Update_Order_OneTime(current_time, id, asset, quantity, filled, frequenc
         print("[%s]: Updating scheduled order" % str(current_time))
         next_run = current_time + cfg.intervals[frequency]
         conn.execute('UPDATE recurring_orders SET last_run = ?, next_run = ? WHERE id = ?', (current_time, next_run, id))
-    conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, frequency, "Coinbase", "Market", str(order_details[0])))
+    try:
+        conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, frequency, "Coinbase", "Market", str(order_details[0])))
+    except Exception as e:
+        raise
+
     conn.commit()
     conn.close()
+
 
 def order_Remover(order):
     try:
