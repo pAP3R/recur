@@ -105,7 +105,7 @@ def sql_Update_Order_OneTime(current_time, id, asset, quantity, filled, frequenc
         next_run = current_time + cfg.intervals[frequency]
         conn.execute('UPDATE recurring_orders SET last_run = ?, next_run = ? WHERE id = ?', (current_time, next_run, id))
     try:
-        conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, frequency, "Coinbase", "Market", str(order_details[0])))
+        conn.execute('INSERT INTO order_history (created, side, asset, quantity, total, frequency, exchange, type, order_details) VALUES (?,?,?,?,?,?,?,?,?)', (time.time(), "Buy", asset, quantity, filled, frequency, "Coinbase", "Market", str(order_details)))
     except Exception as e:
         raise
 
@@ -226,15 +226,16 @@ def scheduled_Order_Execute(order):
                     next_run = current_time + cfg.intervals[order['frequency']]
 
                     # Sleep a moment, then get the order details and print them
-                    time.sleep(1)
+                    print("[%s]: Sleeping 5... waiting for order details." % str(current_time))
+                    time.sleep(5)
                     order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
                     print("[%s]: Fired Order:\n%s\n" % (current_time, order_details))
 
                     # Check for the fee and size
                     # Sometimes this fails because coinbase :shrug
                     try:
-                        fee = order_details[0]['fee']
-                        filled = order_details[0]['size']
+                        fee = order_details[0]['fill_fees']
+                        filled = order_details[0]['filled_size']
                     # Error, estimating fees
                     except Exception as e:
                         print("[!]: 'order_details' list cast error, unable to retrieve fee / filled")
@@ -260,21 +261,23 @@ def onetime_order_execute(asset, quantity, frequency, id):
     for cash in balances:
         #if asset['currency'] == 'EUR':
         if cash["currency"] == "USD":
-
             if float(cash["balance"]) >= float(quantity):
-                print("Balance OK")
-                print(quantity)
-                print(asset)
-                res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 current_time = time.time()
+                print("[%s]: Balance OK! Buying $%s of %s" % (str(current_time), str(quantity), asset))
+
+                # Sleep a moment, then get the order details and print them
+                print("[%s]: Sleeping 5... waiting for order details." % str(current_time))
+                time.sleep(5)
+
+                res = cfg.auth_client.place_market_order(asset, "buy", funds=quantity)
                 print("[%s]: Fired Order:\n%s\n" % (current_time, res))
                 #order_details = sql_Get_Order_By_Id(res["id"])
 
                 order_details = list(cfg.auth_client.get_fills(order_id=res["id"]))
                 print(order_details)
                 try:
-                    fee = order_details[0]['fee']
-                    filled = order_details[0]['size']
+                    fee = order_details[0]['fill_fees']
+                    filled = order_details[0]['filled_size']
                 except Exception as e:
                     print("[!]: 'order_details' list cast error, unable to retrieve fee / filled")
                     # Default maker / taker fee
