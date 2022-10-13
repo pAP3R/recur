@@ -1,6 +1,6 @@
 {% block order_history %}<br>
 <h4>Order History:</h4>
-<p>
+  <br>
 <table id="historyTable" class="table table-hover table-sm table-dark"  width="100%">
   <thead>
     <tr>
@@ -33,4 +33,8 @@
   </tr>
 {% endfor %}
 </table>
+<br>
+<form method="GET" target="{{ url_for('export') }}">
+  <button type="button" class="btn btn-success btn-ok" data-dismiss="modal">Export csv</button>
+</form>
 {% endblock %}

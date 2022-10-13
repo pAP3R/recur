@@ -2,11 +2,13 @@
 import sqlite3
 import time
 import uuid
+import csv
+from io import StringIO 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.base import BaseJobStore
 import apiconfig as cfg
 
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request, url_for, flash, redirect, make_response 
 from flask_script import Manager, Server
 from werkzeug.exceptions import abort
 
@@ -343,6 +345,16 @@ def orders():
     return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time(), order_Totals=order_totals_fiat)
     #return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time(), order_totals=order_totals_fiat)
 
+@app.route('/export')
+def export():
+    all_orders = sql_Get_All_Orders()
+    si = StringIO()
+    cw = csv.writer(si)
+    cw.writerows(all_orders[1])
+    response = make_response(si.getvalue())
+    response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
+    response.headers["Content-type"] = "text/csv"
+    return response
 
 @app.route('/<int:order_id>', methods=('POST','GET'))
 def order_edit(order_id):

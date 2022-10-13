@@ -4,6 +4,9 @@ recur is a web-based order scheduler created to enable users to schedule recurri
 
 ### How much money does it save?
 
+**September 2022 Update** 
+I have no idea if this saves money anymore, ha. It still works though, so that's good.
+
 Assuming you have four $25 purchases a month, occurring at regular intervals through Coinbase's "Recurring Orders" feature, you're currently paying **$7.96 a month in fees**.
 
 However, each of those same purchases only costs twelve cents through Coinbase Pro, at the highest fee tier. **That's only $0.50 a month to do the same thing.**
@@ -16,16 +19,11 @@ Using this is also totally free. There's very little reason *not* to use this if
 
 # Usage
 
-The app has two main components-- Prices and Orders. There's not a whole lot more to it currently. Plans are to implement Binance and CoinMarketCap's APIs next. Most of the functionality exists in the orders endpoint.
-
 ### Recurring Orders
 ![Image of Orders](https://i.imgur.com/ADCnFbq.png)
 
 ### Order History
 ![Image of OrderHistory](https://i.imgur.com/QdQSUsN.png)
-
-### Creating an Order
-![Image of Ordering](https://i.imgur.com/iUbpZ9j.png)
 
 #### Prices
 
@@ -50,17 +48,15 @@ You'll probably want a virtualenv set up, so [do that](https://pythonbasics.org/
 
 Next, you'll need to set up the CBPro API if you haven't (https://pro.coinbase.com/profile/api). It's recommended to use keys which *only* have 'Trade' permissions.
 
-Yeah, I know putting API keys in a file sucks, but since we need to do this all without user interaction, we can't have prompt for a pass to decrypt them or anything. I need some vault thing like ansible I think, or some other kms that let's a user put a pass in once or something. I don't know, suggestions welcome.
+Data encrypted at rest, what's that? Drop your keyz in the file
 
 ### Hosting
 
-You can host it locally or remotely. It will just run a tiny little web server, so you don't need much, just a machine that stays on. Best to host it on your own machine or a LAN machine though, becasue of the keys. It's still possible to secure-ishly host it on AWS, Vultr, or any other VPS as well if you want. Here's an idea-- host it on Vultr for $5.00 a month, restrict access to your home IP, use keys with limited permissions, then donate all the cash you save.
-
-I run recur on an Ubuntu 18.04 vm hosted on an ESXi box at home, it has very little memory and storage dedicated. As long as it stays up, the orders fire.
+It's a flask web app, so do that
 
 ### Install
 
-Install is easy. Clone the repo, and edit the apiconfig.py file to include your API keys and whatever fiat / coin pairs you want to see.
+Clone the repo, and edit the apiconfig.py file to include your API keys and whatever fiat / coin pairs you want to see.
 
 Run a virtualenv, install the requirements and run the app. There's an init_db.py script to create the tables and insert a dummy order for testing.
 
@@ -74,9 +70,7 @@ python3 init_db.py
 python3 app.py runserver --host 0.0.0.0 --threaded --no-reload
 ```
 
-Then, just visit http://loalhost:5000/
-
-Let me know of any issues you find.
+RUns on http://loalhost:5000/
 
 ## Issues Fixed / Features Added:
 
@@ -91,30 +85,32 @@ Let me know of any issues you find.
 - Changed `misfire_grace_time=3600` to `None`
 - Refactored / Consolidated a lot of the SQL stuff, probably more to go, but it makes it easier to manage overall
 - Added placeholders for order totals
-- Added a small `time.sleep(1)` to purchases to help obtain order details
+- Added a small `time.sleep(x)` to purchases to help obtain order details, can't remember how long lol
+- Made it dark now, weeeew
+- Added tabulation / table nav
 
 
 ## Todo:
 
 - [x] Add config file
 - [x] Display 'Account Balance' (For fiat check)
-- [ ] Scheduled order total (weekly / monthly)
+- [x] Scheduled order total (weekly / monthly)
 - [x] More timing options
 - [ ] 'Auto-buy' option based on market cap, fiat and DCA
-- [ ] 'Attempt Undercut' button
 - [ ] Fault tolerance
-- [ ] Input sanitizing / validation
+- [ ] Input sanitizing / validation (lol)
 - [ ] Configurable 'watchlist'
 - [ ] Additional API integrations (Binance, Gemini, CoinMarketCap)
 - [ ] Twillio / SNS integration for purchase alerts?
-- [ ] Export 'Order History'
+- [x] Export 'Order History' (as csv)
 - [x] Capture Order Details
 - [ ] 'Clear Orders' button
 - [x] 'Delete' button
 - [x] 'Edit' button
 - [x] 'Reactivate' button checks (for rescheduling discrepancies)
 - [ ] KMS?
-- [x] Refactor SQL stuff?
+- [x] DARK mode ~~
+- [x] Table navigation
 
 ## Obvious Disclaimer
 
