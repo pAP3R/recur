@@ -20,10 +20,10 @@ Using this is also totally free. There's very little reason *not* to use this if
 # Usage
 
 ### Recurring Orders
-![Image of Orders](https://i.imgur.com/ADCnFbq.png)
+![Image of Orders](https://i.imgur.com/2h5UdHs.jpeg)
 
 ### Order History
-![Image of OrderHistory](https://i.imgur.com/QdQSUsN.png)
+![Image of OrderHistory](https://i.imgur.com/vdBMDLQ.jpg)
 
 #### Prices
 
