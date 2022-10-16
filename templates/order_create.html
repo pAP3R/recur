@@ -6,32 +6,12 @@
 <table cellpadding="4">
   {% for account in balances %}
   <tr>
-    {% if "USD" in account['currency'] %}
+    {% if account['currency'] == "USD" or account['currency'] == "USDT" %}
     <td>
       <h6>{{ account['currency'] }}:</h6>
     </td>
     <td>
       <h6>${{ account['available'] }} </h6>
-    </td>
-    {% endif %}
-  </tr>
-  <tr>
-    {% if "GBP" in account['currency'] %}
-    <td>
-      <h6>{{ account['currency'] }}:</h6>
-    </td>
-    <td>
-      <h6>£{{ account['available'] }} </h6>
-    </td>
-    {% endif %}
-  </tr>
-  <tr>
-    {% if "EUR" in account['currency'] %}
-    <td>
-      <h6>{{ account['currency'] }}:</h6>
-    </td>
-    <td>
-      <h6>€{{ account['available'] }} </h6>
     </td>
     {% endif %}
   </tr>

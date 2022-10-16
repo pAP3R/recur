@@ -34,17 +34,58 @@ def get_Coinbase_Coins(curr, select):
 
     return pairs
 
-# Get ticker for specific currency pairs from an array
-def get_Specific_Coinbase_Coins(coins):
+# Update Prices for Currency Pairs
+def update_Coin_Prices(coins):
     prices = {}
     for coin in coins:
+        #print("[!] Fetching new prices for: %s" % coin)
         prices[coin] = cfg.public_client.get_product_ticker(product_id=coin)
+        prices[coin]['volume'] = "${:,.2f}".format(float(prices[coin]['volume']) * float(prices[coin]['price']))
+
+    # Add to price_history
+    sql_Update_Price_History(prices)
     return prices
+
+def get_Prices(coins):
+    prices = sql_Get_Prices(coins)
+    if prices:
+        return prices
+    else:
+        return
 
 def get_DB_Connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
+
+# Update price_history table
+def sql_Update_Price_History(prices):
+    conn = get_DB_Connection()
+    
+    for coin in prices:
+        #print("inserting: " + prices[coin]['price'])
+        conn.execute('INSERT INTO price_history (time, asset, price, volume) VALUES (?,?,?,?)', (prices[coin]['time'], coin, prices[coin]['price'], prices[coin]['volume']))
+        conn.commit()
+    
+    conn.close()
+    return
+
+# Get price_history table
+def sql_Get_Prices(coins):
+    conn = get_DB_Connection()    
+    try:
+        # Should grab the last len(X) entries from the price_history table, which chould hopefully grab the prices... accurately
+        #print(len(coins))
+        prices = conn.execute('SELECT * FROM price_history ORDER BY id DESC LIMIT ?', (len(coins), )).fetchall()
+        conn.close()
+        return prices
+    except Exception as e:
+        conn.close()
+        print("[!] Failed price retrieval from price_history:")
+        print(e)
+    
+    return False
+    
 
 # Get order details by ID
 def sql_Get_Order_By_Id(order_id):
@@ -334,19 +375,30 @@ def time_filter(val):
 
 @app.route('/')
 def index():
-    prices = get_Specific_Coinbase_Coins(cfg.cb_coins)
-    return render_template('index.html', cb_coins=prices)
+    prices = get_Prices(cfg.cb_coins)    
+    if prices:
+        return render_template('index.html', cb_coins=prices, update=0)
+    else:
+        print("[!] No prices found in table, attempting update and refresh")
+        return update_Prices()        
+
+@app.route('/updatePrices')
+def update_Prices():
+    print("[!] Updating prices...")
+    prices = update_Coin_Prices(cfg.cb_coins) 
+    return render_template('index.html', cb_coins=prices, update=1)
 
 @app.route('/orders')
 def orders():
     all_orders = sql_Get_All_Orders()
     balances = balance_Check()
+    print(balances)
     order_totals_fiat = order_Totals()
     return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time(), order_Totals=order_totals_fiat)
     #return render_template('orders.html', order_history=all_orders[1], recurring_orders=all_orders[0], cb_coins=cfg.cb_coins, balances=balances, ctime=time.time(), order_totals=order_totals_fiat)
 
 @app.route('/export')
-def export():
+def export_orders():
     all_orders = sql_Get_All_Orders()
     si = StringIO()
     cw = csv.writer(si)

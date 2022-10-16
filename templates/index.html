@@ -1,10 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for coin in cb_coins.keys() %}
-    <h5>{{ coin }}: {{ cb_coins[coin]['price'] }}</h5>
-    <p>
-    24h Vol: {{ cb_coins[coin]['volume'] }}<hr>
-    {% endfor %}
-
+<form method="GET" action="{{ url_for('update_Prices') }}">
+    <button type="submit" class="btn btn-success btn-ok" data-dismiss="modal">Update Prices from CB</button>
+  </form>
+  <br>
+<table class="table table-hover table-sm table-dark table-striped"  cellpadding="5">
+    <thead>
+        <tr>
+            <td><h5>Coin</h5></td>
+            <td><h5>Price</h5></td>
+            <td><h5>24-hr Volume</h5></td>
+        </tr>
+    </thead>
+    {% if update %}
+        {% for coin in cb_coins %}
+        <tr>
+            <td>
+                {{ coin }}
+            </td>
+            <td>
+                {{ cb_coins[coin]['price'] }}
+            </td>
+            <td>
+                {{ cb_coins[coin]['volume'] }}
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        {% for coin in cb_coins %}
+        <tr>
+            <td>
+                {{ coin['asset'] }}
+            </td>
+            <td>
+                {{ coin['price'] }}
+            </td>
+            <td>
+                {{ coin['volume'] }}
+            </td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+</table>
 {% endblock %}

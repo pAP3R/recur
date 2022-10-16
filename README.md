@@ -1,12 +1,13 @@
 ## recur, a CBPro recurring order scheduler
 
-recur is a web-based order scheduler created to enable users to schedule recurring orders through CoinbasePro, a feature currently only available on regular Coinbase. By using CBPro over the native order scheduler in Coinbase.com, it's possible to save a significant sum of money, depending on the DCA strategy being used.
+recur is a web-based order scheduler created to enable users to schedule recurring orders through CoinbasePro~~, a feature currently only available on regular Coinbase~~. By using CBPro over the native order scheduler in Coinbase.com, it's possible to save a significant sum of money, depending on the DCA strategy being used. Is this still true in October 2022? Idk.
 
 ### How much money does it save?
 
-**September 2022 Update** 
+**~~September~~ October 2022 Update** 
 I have no idea if this saves money anymore, ha. It still works though, so that's good.
 
+*Original:*
 Assuming you have four $25 purchases a month, occurring at regular intervals through Coinbase's "Recurring Orders" feature, you're currently paying **$7.96 a month in fees**.
 
 However, each of those same purchases only costs twelve cents through Coinbase Pro, at the highest fee tier. **That's only $0.50 a month to do the same thing.**
@@ -27,17 +28,15 @@ Using this is also totally free. There's very little reason *not* to use this if
 
 #### Prices
 
-The Prices page is merely there as an experiment. You can configure pairs in the `cb_coins` list and it will show up in the Prices page, and order menus. This page will turn into a quick recap of prices. I learned templates doing this, it was fun.
+The Prices page is merely there as an experiment. You can configure pairs in the `cb_coins` list and it will show up in the Prices page, and order menus. This page will turn into a quick recap of prices. I began the project with this to learn templates, it was fun.
 
 #### Orders
 
-The orders page, naturally, handles the orders. The top half contains a nav menu with two different tables, one to display all currently configured recurring orders, the other to display a table with all order entries. The lower half of the page contains an order form. Currently, it's only possible to place market orders. You can make one time purchases right there, or set up recurring orders on a daily, weekly or monthly schedule. I have a bootstrap calendar in there right now that I'll hook up for more advanced scheduling.
+Couple crude options for setting up orders on a schedule-- may or may not hook the bootstrap calendar up. Orders are placed at the time of creation, an option to NOT do that could probably be made.
 
-Orders are created within the 'Create Order' form, obviously. Select your target asset, enter an amount you want to spend and select whether you'd like this to be a recurring order or a one time thing. Both options **place** the order, but a recurring order will create a new entry in the recurring orders table, as well as an entry in the order history.
+Should you wish to pause a recurring order, the 'Deactivate' button can be used. This will make it so that even if the orders "trigger" (scheduled date) fires, no order will be run. 
 
-Should you wish to pause a recurring order, the 'Deactivate' button can be used. This will make it so that even if the orders "trigger" (scheduled date) fires, no order will be run. You can also reactivate a scheduled order if you change your mind. However, orders which are overdue will need to be recreated. I have a solution, will get to it soon.
-
-**Remember:** If the app is not running, the orders will not fire.
+You can also reactivate a scheduled order if you change your mind. Orders which are overdue can be de-activated and re-activated, which will trigger them and **all other enabled and overdue orders to fire.**
 
 
 ## Setup
@@ -52,7 +51,7 @@ Data encrypted at rest, what's that? Drop your keyz in the file
 
 ### Hosting
 
-It's a flask web app, so do that
+It's a flask web app, so if you don't know how to do that, start there
 
 ### Install
 
@@ -88,6 +87,8 @@ RUns on http://loalhost:5000/
 - Added a small `time.sleep(x)` to purchases to help obtain order details, can't remember how long lol
 - Made it dark now, weeeew
 - Added tabulation / table nav
+- Added export for order history
+- Made a table for prices, prevents querying for prices every times the "prices" page loads
 
 
 ## Todo:
@@ -96,8 +97,7 @@ RUns on http://loalhost:5000/
 - [x] Display 'Account Balance' (For fiat check)
 - [x] Scheduled order total (weekly / monthly)
 - [x] More timing options
-- [ ] 'Auto-buy' option based on market cap, fiat and DCA
-- [ ] Fault tolerance
+- [ ] Fault tolerance...?
 - [ ] Input sanitizing / validation (lol)
 - [ ] Configurable 'watchlist'
 - [ ] Additional API integrations (Binance, Gemini, CoinMarketCap)
@@ -108,20 +108,17 @@ RUns on http://loalhost:5000/
 - [x] 'Delete' button
 - [x] 'Edit' button
 - [x] 'Reactivate' button checks (for rescheduling discrepancies)
-- [ ] KMS?
 - [x] DARK mode ~~
 - [x] Table navigation
+- [ ] Historical Prices
+- [x] Added price_history table / update prices button
+- [ ] Break current_prices / price_history into separate tables?
+- [ ] Add "last lookup" timestamp to prices
+- [x] Fixed Balances
 
-## Obvious Disclaimer
 
-Look, this script just schedules some orders with apscheduler and fires them via CBPro's Py API. I've done a lot of testing to iron out kinks and things are pretty smooth. There plenty more to add on, and it's more than useable right now. Don't limit test it. It exists on an isolated VM on my ESXi box, one connection in allowed, from only my workstation. If you want it to do more, I happily accept pull requests! There's a lot to do with other API integration, etc.
+### Donations?  :3 
 
-### Donations?
-
-I'm going to keep updating this, at least until it's not profitable to use the APIs like we can. If you want to donate to the project to buy me some coffee and make the code better, feel free!
-
-##### NANO:
-nano_36fgx5eg46ms747kzty36f4gfoy7yzeryo1ndqahc7945f1dzk5y9917g5eh
 ##### ADA:
 addr1q8asj830pmmz99fnfuj8cmfre7h0phwjx389gdy5amjsxruuc3d90nf8nsczcc89z6cr3gsusk0fe04raacmm24q7zgsykj90d
 ##### ETH:
