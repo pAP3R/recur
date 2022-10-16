@@ -1,6 +1,6 @@
 ## recur, a CBPro recurring order scheduler
 
-recur is a web-based order scheduler created to enable users to schedule recurring orders through CoinbasePro ~~ , a feature currently only available on regular Coinbase~~. By using CBPro over the native order scheduler in Coinbase.com, it's possible to save a significant sum of money, depending on the DCA strategy being used. Is this still true in October 2022? Idk.
+recur is a web-based order scheduler created to enable users to schedule recurring orders through CoinbasePro ~~a feature currently only available on regular Coinbase~~. By using CBPro over the native order scheduler in Coinbase.com, it's possible to save a significant sum of money, depending on the DCA strategy being used. Is this still true in October 2022? Idk.
 
 ### How much money does it save?
 
